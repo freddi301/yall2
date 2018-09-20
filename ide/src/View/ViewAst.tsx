@@ -26,8 +26,8 @@ export class ViewAst extends React.PureComponent<{
             }
             right={
               <ViewAst
-                ast={ast.left}
-                path={path.concat("left")}
+                ast={ast.right}
+                path={path.concat("right")}
                 select={select}
               />
             }

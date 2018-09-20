@@ -11,6 +11,7 @@
     "max-classes-per-file": false,
     "interface-name": false,
     "object-literal-sort-keys": false,
-    "callable-types": false
+    "callable-types": false,
+    "ordered-imports": false
   }
 }
