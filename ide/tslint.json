@@ -12,6 +12,7 @@
     "interface-name": false,
     "object-literal-sort-keys": false,
     "callable-types": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "jsx-no-lambda": false
   }
 }

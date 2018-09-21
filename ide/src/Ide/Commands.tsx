@@ -1,4 +1,4 @@
-import { cloneDeep, set } from "lodash";
+import { cloneDeep, set, get } from "lodash";
 import * as React from "react";
 import { Ast } from "../Ast/Ast";
 
@@ -8,13 +8,13 @@ export class Commands extends React.PureComponent<{
   replace(ast: Ast): void;
 }> {
   public render() {
-    // const { ast, path } = this.props;
-    // const node: Ast = get(ast, path);
     return (
       <>
         <button onClick={this.insertReference}>insert Reference</button>
         <button onClick={this.insertApplication}>insert Application</button>
         <button onClick={this.insertAbstraction}>insert Abstraction</button>
+        {this.modifyReference()}
+        {this.modifyAbstraction()}
       </>
     );
   }
@@ -61,6 +61,40 @@ export class Commands extends React.PureComponent<{
         source: this.props.selected.concat("body").join(".")
       },
       source: ""
+    });
+  };
+  private modifyReference() {
+    const { ast, selected } = this.props;
+    const node: Ast = get(ast, selected, ast);
+    if (node.type === "Reference") {
+      return <input onChange={e => this.changeReference(e.target.value)} />;
+    } else {
+      return null;
+    }
+  }
+  private changeReference = (identifier: string) => {
+    this.insertNode({
+      type: "Reference",
+      identifier,
+      source: this.props.selected.join(".")
+    });
+  };
+  private modifyAbstraction() {
+    const { ast, selected } = this.props;
+    const node: Ast = get(ast, selected, ast);
+    if (node.type === "Abstraction") {
+      return <input onChange={e => this.changeAbstraction(e.target.value)} />;
+    } else {
+      return null;
+    }
+  }
+  private changeAbstraction = (head: string) => {
+    const {selected, ast} = this.props;
+    this.insertNode({
+      type: "Abstraction",
+      head,
+      body: get(ast, selected.concat("body")),
+      source: this.props.selected.join(".")
     });
   };
 }
