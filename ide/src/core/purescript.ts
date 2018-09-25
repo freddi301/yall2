@@ -1,6 +1,10 @@
+import { Ast } from "../Ast/Ast";
 import { Abstraction, Application, Reference } from "../language/Yall.Ast";
-import { evaluateEager, evaluateLazy } from "../language/Yall.External";
-import { Ast } from "./Ast";
+import {
+  evaluateEager,
+  evaluateLazy,
+  evaluateSymbolic
+} from "../language/Yall.External";
 
 type PurescriptAst = any;
 
@@ -47,5 +51,10 @@ export const evaluate = {
   },
   lazy(ast: PurescriptAst): PurescriptAst {
     return evaluateLazy(ast);
+  },
+  symbolic(ast: PurescriptAst): PurescriptAst {
+    return evaluateSymbolic(ast);
   }
 };
+
+export type EvaluationStrategy = keyof (typeof evaluate);

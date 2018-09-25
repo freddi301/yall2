@@ -63,13 +63,13 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-app-cache-dir@^0.3.0:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/app-cache-dir/-/app-cache-dir-0.3.1.tgz#ce36a8aa966e26516adcdf3356ea47f4720805f1"
+app-cache-dir@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/app-cache-dir/-/app-cache-dir-0.2.1.tgz#20910ecf27a16162a12a5b80b295042c34fc8e71"
   dependencies:
     inspect-with-kind "^1.0.2"
 
-append-type@^1.0.1:
+append-type@^1.0.0, append-type@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/append-type/-/append-type-1.0.1.tgz#e29a6eb22cec0c0b9b93063b3cf6b10d9e0c60f4"
 
@@ -385,12 +385,12 @@ buffer@^4.1.0:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-build-purescript@^0.2.0:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/build-purescript/-/build-purescript-0.2.3.tgz#49dffd5917384d55b8b22d0100a74e11baf69513"
+build-purescript@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/build-purescript/-/build-purescript-0.1.1.tgz#520cbe2018eb8f23632a74c31d36c24f9bbf0921"
   dependencies:
-    download-purescript-source "^0.4.0"
-    feint "^1.0.2"
+    download-purescript-source "^0.3.2"
+    feint "^1.0.1"
     graceful-fs "^4.1.11"
     inspect-with-kind "^1.0.4"
     is-plain-obj "^1.1.0"
@@ -398,8 +398,9 @@ build-purescript@^0.2.0:
     mkdirp "^0.5.1"
     once "^1.4.0"
     rimraf "^2.6.2"
-    spawn-stack "^0.5.0"
-    zen-observable "^0.6.1"
+    spawn-stack "0.3.1-0 "
+    uid2 "^0.0.3"
+    zen-observable "^0.6.0"
 
 builtin-status-codes@^3.0.0:
   version "3.0.0"
@@ -433,13 +434,7 @@ cancelable-pump@^0.2.0:
   dependencies:
     pump "^1.0.2"
 
-cancelable-pump@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/cancelable-pump/-/cancelable-pump-0.4.0.tgz#9d02b16a30fe81835238fc6582670b660bf511cf"
-  dependencies:
-    pump "^3.0.0"
-
-chalk@^2.0.1, chalk@^2.4.0, chalk@^2.4.1:
+chalk@^2.0.1, chalk@^2.3.0, chalk@^2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
   dependencies:
@@ -623,16 +618,6 @@ cross-spawn@^5.0.1:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-cross-spawn@^6.0.0:
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-6.0.5.tgz#4a5ec7c64dfae22c3a14124dbacdee846d80cbc4"
-  dependencies:
-    nice-try "^1.0.4"
-    path-key "^2.0.1"
-    semver "^5.5.0"
-    shebang-command "^1.2.0"
-    which "^1.2.9"
-
 crypto-browserify@^3.0.0:
   version "3.12.0"
   resolved "https://registry.yarnpkg.com/crypto-browserify/-/crypto-browserify-3.12.0.tgz#396cf9f3137f03e4b8e532c58f698254e00f80ec"
@@ -729,9 +714,9 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-dl-tar@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/dl-tar/-/dl-tar-0.6.0.tgz#a3b829bb504dafea523d0ee23e187c0d95c93167"
+dl-tar@^0.5.2:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/dl-tar/-/dl-tar-0.5.3.tgz#ecbe7e2f419fcfde4dfa2f12de7b88b7dabf01aa"
   dependencies:
     cancelable-pump "^0.2.0"
     graceful-fs "^4.1.11"
@@ -741,51 +726,51 @@ dl-tar@^0.6.0:
     load-request-from-cwd-or-npm "^2.0.1"
     tar-fs "^1.16.0"
     tar-stream "^1.5.5"
-    zen-observable "^0.6.1"
+    zen-observable "^0.6.0"
 
-dl-tgz@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/dl-tgz/-/dl-tgz-0.6.0.tgz#5dc2dd7fa93c33e6e10e9e3d4b1f3785f021a845"
+dl-tgz@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/dl-tgz/-/dl-tgz-0.5.1.tgz#b076823202e1d0d7f68c2cbc2bd1bc7f9bade31b"
   dependencies:
-    dl-tar "^0.6.0"
+    dl-tar "^0.5.2"
     is-plain-obj "^1.1.0"
-    zen-observable "^0.6.1"
+    zen-observable "^0.6.0"
 
 domain-browser@~1.1.0:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.1.7.tgz#867aa4b093faa05f1de08c06f4d7b21fdf8698bc"
 
-download-or-build-purescript@^0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/download-or-build-purescript/-/download-or-build-purescript-0.0.9.tgz#c9cd1c6d65f34fca51f9e1a3947d88ccbe2bc73a"
+download-or-build-purescript@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/download-or-build-purescript/-/download-or-build-purescript-0.0.7.tgz#aaf5a3bf97f664ff8936147e7862bfab4acfc21d"
   dependencies:
-    build-purescript "^0.2.0"
-    download-purescript "0.5.0-0"
-    execa "^0.10.0"
-    feint "^1.0.2"
+    build-purescript "^0.1.0"
+    download-purescript "^0.3.0"
+    execa "^0.7.0"
+    feint "1.0.1"
     graceful-fs "^4.1.11"
-    inspect-with-kind "^1.0.4"
+    inspect-with-kind "^1.0.3"
     is-plain-obj "^1.1.0"
     once "^1.4.0"
-    prepare-write "^0.3.1"
-    spawn-stack "^0.5.0"
+    prepare-write "^0.3.0"
+    spawn-stack "0.3.1-0"
     which "^1.3.0"
     zen-observable "^0.6.0"
 
-download-purescript-source@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/download-purescript-source/-/download-purescript-source-0.4.0.tgz#0bcd29cc67959db7a4fcc5def2452d880721013f"
+download-purescript-source@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/download-purescript-source/-/download-purescript-source-0.3.2.tgz#f2990c9961e876c4b7d452cfc2636b1240d191a5"
   dependencies:
-    dl-tgz "^0.6.0"
+    dl-tgz "^0.5.1"
     inspect-with-kind "^1.0.4"
     is-plain-obj "^1.1.0"
     zen-observable "^0.6.1"
 
-download-purescript@0.5.0-0:
-  version "0.5.0-0"
-  resolved "https://registry.yarnpkg.com/download-purescript/-/download-purescript-0.5.0-0.tgz#b1d8e5fab6aafe5304d3005daf828b9a6f8101e7"
+download-purescript@^0.3.0:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/download-purescript/-/download-purescript-0.3.3.tgz#95eb149c460bac8ed3100aef6821c4d524644645"
   dependencies:
-    dl-tgz "^0.6.0"
+    dl-tgz "^0.5.1"
     inspect-with-kind "^1.0.4"
     is-plain-obj "^1.1.0"
     zen-observable "^0.6.1"
@@ -832,18 +817,6 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
   dependencies:
     md5.js "^1.3.4"
     safe-buffer "^5.1.1"
-
-execa@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/execa/-/execa-0.10.0.tgz#ff456a8f53f90f8eccc71a96d11bdfc7f082cb50"
-  dependencies:
-    cross-spawn "^6.0.0"
-    get-stream "^3.0.0"
-    is-stream "^1.1.0"
-    npm-run-path "^2.0.0"
-    p-finally "^1.0.0"
-    signal-exit "^3.0.0"
-    strip-eof "^1.0.0"
 
 execa@^0.7.0:
   version "0.7.0"
@@ -899,23 +872,29 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-feint@1.0.2, feint@^1.0.2:
+feint@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/feint/-/feint-1.0.1.tgz#16c642adf37ebf34878f2eb8318f7a5fbd6c8b9c"
+  dependencies:
+    append-type "^1.0.0"
+
+feint@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/feint/-/feint-1.0.2.tgz#f4ac51d6ed7db2cc5a0ba6913f84d43f72dd680b"
   dependencies:
     append-type "^1.0.1"
 
-file-to-tar@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/file-to-tar/-/file-to-tar-0.3.1.tgz#d5ccb4753c53f23245f7226a54cd85723d626c31"
+file-to-tar@^0.2.2:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/file-to-tar/-/file-to-tar-0.2.3.tgz#25b92bd153bf007b84bdcd1a21096dfe8e8af0a1"
   dependencies:
-    cancelable-pump "^0.4.0"
+    cancelable-pump "^0.2.0"
     graceful-fs "^4.1.11"
     inspect-with-kind "^1.0.4"
     is-plain-obj "^1.1.0"
     is-stream "^1.1.0"
     mkdirp "^0.5.1"
-    tar-fs "^1.16.2"
+    tar-fs "^1.16.0"
     zen-observable "^0.6.1"
 
 filesize@^3.5.10:
@@ -1150,46 +1129,46 @@ inspect-with-kind@^1.0.2, inspect-with-kind@^1.0.3, inspect-with-kind@^1.0.4:
   dependencies:
     kind-of "^6.0.2"
 
-"install-purescript-cli@^0.4.0 || ^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/install-purescript-cli/-/install-purescript-cli-0.3.0.tgz#0281c3962809481eece66c59c4bd4be8de968cf2"
+install-purescript-cli@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/install-purescript-cli/-/install-purescript-cli-0.2.1.tgz#4f2c9c161f35b8c93c38836604cf0fc92c2b8f42"
   dependencies:
     chalk "^2.4.1"
-    install-purescript "^0.4.0"
+    install-purescript "^0.2.0"
     log-symbols "^2.2.0"
     log-update "^2.3.0"
     minimist "^1.2.0"
     ms "^2.1.1"
-    neat-frame "^1.0.1"
-    neat-stack "^1.0.0"
+    neat-frame "^0.2.0"
+    neat-stack "^0.1.2"
     once "^1.4.0"
-    platform-name "^1.0.0"
+    platform-name "^0.6.1"
     size-rate "^0.1.0"
     tilde-path "^2.0.0"
-    tty-truncate "^1.0.0"
-    vertical-meter "^1.0.0"
+    tty-truncate "^0.3.1"
+    vertical-meter "^0.2.0"
 
-install-purescript@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/install-purescript/-/install-purescript-0.4.0.tgz#4e07ebc8bb5ffa512720f5df54c0a9beaa04eb7b"
+install-purescript@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/install-purescript/-/install-purescript-0.2.1.tgz#e53a4aa097204b9f6b43fa8343aa02d66f8ecc36"
   dependencies:
-    app-cache-dir "^0.3.0"
+    app-cache-dir "^0.2.1"
     arch "^2.1.0"
-    download-or-build-purescript "^0.0.9"
-    execa "^0.10.0"
-    feint "1.0.2"
-    file-to-tar "^0.3.1"
+    download-or-build-purescript "^0.0.7"
+    execa "^0.7.0"
+    feint "1.0.1"
+    file-to-tar "^0.2.2"
     graceful-fs "^4.1.11"
     inspect-with-kind "^1.0.4"
     is-plain-obj "^1.1.0"
     once "^1.4.0"
-    prepare-write "^1.0.0"
-    readdir-clean "^1.0.0"
+    prepare-write "^0.3.1"
+    readdir-clean "^0.4.0"
     rimraf "^2.6.2"
-    tar-to-file "^0.4.0"
+    tar-to-file "^0.2.0"
     tilde-path "^2.0.0"
-    truncated-list "^1.0.1"
-    zen-observable "^0.6.1"
+    truncated-list "^0.1.0"
+    zen-observable "^0.6.0"
 
 is-accessor-descriptor@^0.1.6:
   version "0.1.6"
@@ -1582,20 +1561,20 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-neat-frame@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/neat-frame/-/neat-frame-1.0.1.tgz#869ce2ca7e121dc5afd3648fbe80249ec8fd7990"
+neat-frame@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/neat-frame/-/neat-frame-0.2.0.tgz#30b8a7edd0908a5d37ce0ff799d2a14026622c60"
   dependencies:
-    inspect-with-kind "^1.0.4"
+    inspect-with-kind "^1.0.2"
     string-width "^2.1.1"
     term-size "^1.2.0"
     wrap-ansi "^3.0.1"
 
-neat-stack@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/neat-stack/-/neat-stack-1.0.0.tgz#d3e867acc4bb15bf8d518762beb6aa76a632d151"
+neat-stack@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/neat-stack/-/neat-stack-0.1.2.tgz#c5e55118b0fd60be6ebced32e23c5113ff76dfc9"
   dependencies:
-    chalk "^2.4.0"
+    chalk "^2.3.0"
     clean-stack "^1.3.0"
 
 needle@^2.2.1:
@@ -1609,10 +1588,6 @@ needle@^2.2.1:
 neo-async@^2.5.0:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.2.tgz#489105ce7bc54e709d736b195f82135048c50fcc"
-
-nice-try@^1.0.4:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
 
 node-pre-gyp@^0.10.0:
   version "0.10.3"
@@ -1800,7 +1775,7 @@ path-is-absolute@^1.0.0, path-is-absolute@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
 
-path-key@^2.0.0, path-key@^2.0.1:
+path-key@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/path-key/-/path-key-2.0.1.tgz#411cadb574c5a140d3a4b1910d40d80cc9f40b40"
 
@@ -1822,9 +1797,9 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-platform-name@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/platform-name/-/platform-name-1.0.0.tgz#3396ea7bfea3a68aedd13483e055100f9e609755"
+platform-name@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/platform-name/-/platform-name-0.6.1.tgz#29354bac6a613bbab4f323ad2bf589614d6e7420"
   dependencies:
     inspect-with-kind "^1.0.4"
 
@@ -1832,21 +1807,12 @@ posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
 
-prepare-write@^0.3.1:
+prepare-write@^0.3.0, prepare-write@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/prepare-write/-/prepare-write-0.3.1.tgz#7a2fe52f269f5bedc27bae253be434f330743b67"
   dependencies:
     graceful-fs "^4.1.11"
     inspect-with-kind "^1.0.2"
-    is-dir "^1.0.0"
-    mkdirp "^0.5.1"
-
-prepare-write@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/prepare-write/-/prepare-write-1.0.0.tgz#9ad085e39e541d3b36142496419d2335c7e34199"
-  dependencies:
-    graceful-fs "^4.1.11"
-    inspect-with-kind "^1.0.4"
     is-dir "^1.0.0"
     mkdirp "^0.5.1"
 
@@ -1904,13 +1870,6 @@ pump@^1.0.0, pump@^1.0.2:
     end-of-stream "^1.1.0"
     once "^1.3.1"
 
-pump@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/pump/-/pump-3.0.0.tgz#b4a2116815bde2f4e1ea602354e8c75565107a64"
-  dependencies:
-    end-of-stream "^1.1.0"
-    once "^1.3.1"
-
 punycode@1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.3.2.tgz#9653a036fb7c1ee42342f2325cceefea3926c48d"
@@ -1919,11 +1878,11 @@ punycode@^1.3.2:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-purescript@^0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/purescript/-/purescript-0.12.0.tgz#45331c61c586f09dcae20bb5242705831ef0ec20"
+purescript@^0.11.0:
+  version "0.11.7"
+  resolved "https://registry.yarnpkg.com/purescript/-/purescript-0.11.7.tgz#a88907ad9d9a5bd0e8484447b75b178bcfb3e070"
   dependencies:
-    install-purescript-cli "^0.4.0 || ^0.3.0"
+    install-purescript-cli "^0.2.0"
 
 querystring-es3@~0.2.0:
   version "0.2.1"
@@ -1996,11 +1955,12 @@ readable-stream@~2.0.0:
     string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
 
-readdir-clean@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/readdir-clean/-/readdir-clean-1.0.0.tgz#2c578af9edcd45a13229585a0d211cf22e54c256"
+readdir-clean@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/readdir-clean/-/readdir-clean-0.4.0.tgz#a5c61b04243a9c21298e94d6f7e3e70227589caa"
   dependencies:
     graceful-fs "^4.1.11"
+    inspect-with-kind "^1.0.2"
     junk "^2.1.0"
 
 readdirp@^2.0.0:
@@ -2125,7 +2085,7 @@ sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
-semver@^5.3.0, semver@^5.5.0:
+semver@^5.3.0:
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.1.tgz#7dfdd8814bdb7cabc7be0fb1d734cfb66c940477"
 
@@ -2199,11 +2159,9 @@ size-rate@^0.1.0:
     filesize "^3.5.10"
     inspect-with-kind "^1.0.2"
 
-slice-ansi@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-1.0.0.tgz#044f1a49d8842ff307aad6b505ed178bd950134d"
-  dependencies:
-    is-fullwidth-code-point "^2.0.0"
+slice-ansi@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.1.0.tgz#a884ecf178e98c36ae4f629253778a24d12ed17b"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
@@ -2263,14 +2221,13 @@ sourcemap-codec@^1.3.0:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.1.tgz#c8fd92d91889e902a07aee392bdd2c5863958ba2"
 
-spawn-stack@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/spawn-stack/-/spawn-stack-0.5.0.tgz#67c2fea37d33405a934ef1c7bca3bf86b9f2d3d4"
+spawn-stack@0.3.1-0, "spawn-stack@0.3.1-0 ":
+  version "0.3.1-0"
+  resolved "https://registry.yarnpkg.com/spawn-stack/-/spawn-stack-0.3.1-0.tgz#5e5fbfd76f2c6476cf6cdd53c2bfc56899cf3da0"
   dependencies:
     byline "^5.0.0"
-    execa "^0.10.0"
-    inspect-with-kind "^1.0.4"
-    zen-observable "^0.6.1"
+    execa "^0.7.0"
+    zen-observable "^0.6.0"
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
@@ -2328,7 +2285,7 @@ string-width@^1.0.1:
     is-fullwidth-code-point "^1.0.0"
     strip-ansi "^3.0.0"
 
-"string-width@^1.0.2 || 2", string-width@^2.1.1:
+"string-width@^1.0.2 || 2", string-width@^2.1.0, string-width@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-2.1.1.tgz#ab93f27a8dc13d28cac815c462143a6d9012ae9e"
   dependencies:
@@ -2383,7 +2340,7 @@ syntax-error@^1.1.1:
   dependencies:
     acorn-node "^1.2.0"
 
-tar-fs@^1.16.0, tar-fs@^1.16.2:
+tar-fs@^1.16.0:
   version "1.16.3"
   resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-1.16.3.tgz#966a628841da2c4010406a82167cbd5e0c72d509"
   dependencies:
@@ -2392,7 +2349,7 @@ tar-fs@^1.16.0, tar-fs@^1.16.2:
     pump "^1.0.0"
     tar-stream "^1.1.2"
 
-tar-stream@^1.1.2, tar-stream@^1.5.5, tar-stream@^1.6.1:
+tar-stream@^1.1.2, tar-stream@^1.5.5:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/tar-stream/-/tar-stream-1.6.1.tgz#f84ef1696269d6223ca48f6e1eeede3f7e81f395"
   dependencies:
@@ -2404,17 +2361,17 @@ tar-stream@^1.1.2, tar-stream@^1.5.5, tar-stream@^1.6.1:
     to-buffer "^1.1.0"
     xtend "^4.0.0"
 
-tar-to-file@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/tar-to-file/-/tar-to-file-0.4.0.tgz#b998bec435ac72cd6edd0718e184beae6461070e"
+tar-to-file@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/tar-to-file/-/tar-to-file-0.2.1.tgz#4d87a708b1242776016fd15a5fc9b97889f15a52"
   dependencies:
-    cancelable-pump "^0.4.0"
+    cancelable-pump "^0.2.0"
     graceful-fs "^4.1.11"
     inspect-with-kind "^1.0.4"
     is-plain-obj "^1.1.0"
     is-stream "^1.1.0"
-    tar-fs "^1.16.2"
-    tar-stream "^1.6.1"
+    tar-fs "^1.16.0"
+    tar-stream "^1.5.5"
     zen-observable "^0.6.1"
 
 tar@^4:
@@ -2501,28 +2458,32 @@ tree-kill@^1.0.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/tree-kill/-/tree-kill-1.2.0.tgz#5846786237b4239014f05db156b643212d4c6f36"
 
-truncated-list@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/truncated-list/-/truncated-list-1.0.1.tgz#08f751c7c044111ece2c7868f5ef736412f2ead4"
+truncated-list@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/truncated-list/-/truncated-list-0.1.0.tgz#ef9be944fe43663a7b7bf5b3fbf0a9a5ad6f2e73"
   dependencies:
-    inspect-with-kind "^1.0.4"
+    inspect-with-kind "^1.0.2"
 
 tty-browserify@~0.0.0:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.1.tgz#3f05251ee17904dfd0677546670db9651682b811"
 
-tty-truncate@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/tty-truncate/-/tty-truncate-1.0.0.tgz#0a835a5b5553f00f17f7d65c29f40a55fe217475"
+tty-truncate@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/tty-truncate/-/tty-truncate-0.3.1.tgz#c8ee825a936012dd10792295da56b5879cd674b0"
   dependencies:
     ansi-regex "^3.0.0"
-    inspect-with-kind "^1.0.4"
-    slice-ansi "^1.0.0"
-    string-width "^2.1.1"
+    inspect-with-kind "^1.0.2"
+    slice-ansi "^0.1.0"
+    string-width "^2.1.0"
 
 typedarray@^0.0.6, typedarray@~0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+uid2@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/uid2/-/uid2-0.0.3.tgz#483126e11774df2f71b8b639dcd799c376162b82"
 
 umd@^3.0.0:
   version "3.0.3"
@@ -2588,9 +2549,9 @@ util@~0.10.1:
   dependencies:
     inherits "2.0.3"
 
-vertical-meter@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/vertical-meter/-/vertical-meter-1.0.0.tgz#b910bfc107294346b612618bc8bbfc3da62259cd"
+vertical-meter@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/vertical-meter/-/vertical-meter-0.2.0.tgz#c7b2a45cc450448c12456fd7c98c288cb77c2f09"
   dependencies:
     rate-map "^1.0.1"
 

@@ -1,33 +1,26 @@
 import { get } from "lodash";
 import * as React from "react";
 import { Ast } from "../Ast/Ast";
-import {
-  evaluate,
-  fromPurescriptAst,
-  toPurescriptAst
-} from "../Ast/purescript";
+import { PromiseComponent } from "../Components/PromiseComponent";
 import { createStateManagment } from "../utils/reduxLike";
 import { ViewAst } from "../View/ViewAst";
 import { Commands } from "./Commands";
+import { evaluate } from "../core/evaluateService";
+import { EvaluationStrategy } from "../core/purescript";
 
 export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
   public state: IdeState = {
     ast: sample,
     selected: [],
-    evaluationStrategy: "eager"
+    evaluationStrategy: "symbolic"
   };
   public render() {
     const { ast, selected, evaluationStrategy } = this.state;
     const { path } = this.props;
-    let evaluated: Ast | Error;
-    try {
-      evaluated = fromPurescriptAst(
-        evaluate[evaluationStrategy](toPurescriptAst(get(ast, selected, ast)))
-      );
-    } catch (e) {
-      evaluated = ast;
-      console.error(e); // tslint:disable-line
-    }
+    const evaluated = evaluate({
+      ast: get(ast, selected, ast),
+      evaluationStrategy
+    });
     return (
       <div>
         <div style={{ display: "flex" }}>
@@ -50,14 +43,22 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
           >
             <option value="eager">eager</option>
             <option value="lazy">lazy</option>
+            <option value="symbolic">symbolic</option>
           </select>
-          <ViewAst
-            ast={evaluated}
-            path={path.concat(selected)}
-            select={() => {
-              return;
-            }}
-            selected={[Symbol().toString()]}
+          <PromiseComponent
+            promise={evaluated}
+            onPending={"working..."}
+            onResolve={resultAst => (
+              <ViewAst
+                ast={resultAst}
+                path={path.concat(selected)}
+                select={() => {
+                  return;
+                }}
+                selected={[Symbol().toString()]}
+              />
+            )}
+            onReject={error => String(error)}
           />
         </div>
       </div>
@@ -73,7 +74,7 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
     this.dispatch(actions.replace(ast));
   };
   private changeEvaluationStrategy(
-    evaluationStrategy: keyof (typeof evaluate)
+    evaluationStrategy: EvaluationStrategy
   ) {
     this.setState({ evaluationStrategy });
   }
@@ -82,7 +83,7 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
 interface IdeState {
   ast: Ast;
   selected: string[];
-  evaluationStrategy: keyof (typeof evaluate);
+  evaluationStrategy: EvaluationStrategy;
 }
 
 const { reducer, actions, dispatch } = createStateManagment<IdeState>()({
