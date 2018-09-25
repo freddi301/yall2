@@ -12,6 +12,10 @@ bind = flip wait
 
 eager ∷ ∀ container reference source . Eq reference ⇒ Pauseable container ⇒
   Ast reference source → container (Ast reference source)
+
+eager term@(Application _ (Reference _ _) _) = end term -- infinite recursion due to free variable guard
+eager term@(Application (Reference _ _) _ _) = end term -- infinite recursion due to free variable guard
+
 eager (Application (Abstraction head body _) right@(Abstraction _ _ _) _) =
   eager |> reify head right body
 eager (Application left right source) = do
@@ -22,6 +26,10 @@ eager term = end term
 
 lazy ∷ ∀ container reference source . Eq reference ⇒ Pauseable container ⇒
   Ast reference source → container (Ast reference source)
+
+lazy term@(Application _ (Reference _ _) _) = end term -- infinite recursion due to free variable guard
+lazy term@(Application (Reference _ _) _ _) = end term -- infinite recursion due to free variable guard
+
 lazy (Application (Abstraction head body _) right _) =
   lazy |> reify head right body
 lazy (Application left right source) = do
