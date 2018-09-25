@@ -30,7 +30,12 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
       <div>
         <div style={{ display: "flex" }}>
           <div style={{ flexGrow: 2 }}>
-            <ViewAst ast={ast} path={path} select={this.select} />
+            <ViewAst
+              ast={ast}
+              path={path}
+              select={this.select}
+              selected={selected}
+            />
           </div>
           <div style={{ flexGrow: 1 }}>
             <Commands ast={ast} selected={selected} replace={this.replace} />
@@ -44,7 +49,12 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
             <option value="eager">eager</option>
             <option value="lazy">lazy</option>
           </select>
-          <ViewAst ast={evaluated} path={path} select={this.select} />
+          <ViewAst
+            ast={evaluated}
+            path={path}
+            select={this.select}
+            selected={selected}
+          />
         </div>
       </div>
     );
