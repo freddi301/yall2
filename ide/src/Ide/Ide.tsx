@@ -12,17 +12,18 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
   public state: IdeState = {
     ast: sample,
     selected: [],
-    evaluationStrategy: "symbolic"
+    evaluationStrategy: "symbolic",
+    clipboard: sample
   };
   public render() {
-    const { ast, selected, evaluationStrategy } = this.state;
+    const { ast, selected, evaluationStrategy, clipboard } = this.state;
     const { path } = this.props;
     const evaluated = evaluate({
       ast: get(ast, selected, ast),
       evaluationStrategy
     });
     return (
-      <div>
+      <div tabIndex={1} ref={element => (element ? element.focus() : null)}>
         <div style={{ display: "flex" }}>
           <div style={{ flexGrow: 2 }}>
             <ViewAst
@@ -33,7 +34,13 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
             />
           </div>
           <div style={{ flexGrow: 1 }}>
-            <Commands ast={ast} selected={selected} replace={this.replace} />
+            <Commands
+              ast={ast}
+              selected={selected}
+              replace={this.replace}
+              clipboard={clipboard}
+              clip={this.clip}
+            />
           </div>
         </div>
         <div>
@@ -73,17 +80,19 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
   private replace = (ast: Ast) => {
     this.dispatch(actions.replace(ast));
   };
-  private changeEvaluationStrategy(
-    evaluationStrategy: EvaluationStrategy
-  ) {
+  private changeEvaluationStrategy(evaluationStrategy: EvaluationStrategy) {
     this.setState({ evaluationStrategy });
   }
+  private clip = (ast: Ast) => {
+    this.setState({ clipboard: ast });
+  };
 }
 
 interface IdeState {
   ast: Ast;
   selected: string[];
   evaluationStrategy: EvaluationStrategy;
+  clipboard: Ast;
 }
 
 const { reducer, actions, dispatch } = createStateManagment<IdeState>()({

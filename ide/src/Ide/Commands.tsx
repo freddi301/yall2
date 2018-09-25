@@ -6,6 +6,8 @@ export class Commands extends React.PureComponent<{
   ast: Ast;
   selected: string[];
   replace(ast: Ast): void;
+  clipboard: Ast;
+  clip(ast: Ast): void
 }> {
   public render() {
     return (
@@ -15,6 +17,8 @@ export class Commands extends React.PureComponent<{
         <button onClick={this.insertReference}>insert Reference</button>
         <button onClick={this.insertApplication}>insert Application</button>
         <button onClick={this.insertAbstraction}>insert Abstraction</button>
+        <button onClick={this.copy}>copy</button>
+        <button onClick={this.paste}>paste</button>
         <button onClick={this.export}>export</button>
         <button onClick={this.import}>import</button>
       </>
@@ -123,6 +127,14 @@ export class Commands extends React.PureComponent<{
   private import = async () => {
     this.insertNode(await readFile());
   };
+  private copy = () => {
+    const {ast,clip,selected} = this.props;
+    clip(get(ast,selected,ast))
+  };
+  private paste = () => {
+    const {clipboard}=this.props;
+    this.insertNode(clipboard)
+  }
 }
 
 function download(filename: string, text: string) {
