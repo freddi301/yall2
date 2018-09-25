@@ -1,4 +1,4 @@
-import { cloneDeep, set, get } from "lodash";
+import { cloneDeep, get, set } from "lodash";
 import * as React from "react";
 import { Ast } from "../Ast/Ast";
 
@@ -10,11 +10,11 @@ export class Commands extends React.PureComponent<{
   public render() {
     return (
       <>
+        {this.modifyReference()}
+        {this.modifyAbstraction()}
         <button onClick={this.insertReference}>insert Reference</button>
         <button onClick={this.insertApplication}>insert Application</button>
         <button onClick={this.insertAbstraction}>insert Abstraction</button>
-        {this.modifyReference()}
-        {this.modifyAbstraction()}
       </>
     );
   }
@@ -89,7 +89,7 @@ export class Commands extends React.PureComponent<{
     }
   }
   private changeAbstraction = (head: string) => {
-    const {selected, ast} = this.props;
+    const { selected, ast } = this.props;
     this.insertNode({
       type: "Abstraction",
       head,
