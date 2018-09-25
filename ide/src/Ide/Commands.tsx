@@ -15,6 +15,8 @@ export class Commands extends React.PureComponent<{
         <button onClick={this.insertReference}>insert Reference</button>
         <button onClick={this.insertApplication}>insert Application</button>
         <button onClick={this.insertAbstraction}>insert Abstraction</button>
+        <button onClick={this.export}>export</button>
+        <button onClick={this.import}>import</button>
       </>
     );
   }
@@ -67,7 +69,16 @@ export class Commands extends React.PureComponent<{
     const { ast, selected } = this.props;
     const node: Ast = get(ast, selected, ast);
     if (node.type === "Reference") {
-      return <input onChange={e => this.changeReference(e.target.value)} />;
+      return (
+        <input
+          onChange={e => this.changeReference(e.target.value)}
+          ref={element => {
+            if (element) {
+              element.focus();
+            }
+          }}
+        />
+      );
     } else {
       return null;
     }
@@ -83,7 +94,16 @@ export class Commands extends React.PureComponent<{
     const { ast, selected } = this.props;
     const node: Ast = get(ast, selected, ast);
     if (node.type === "Abstraction") {
-      return <input onChange={e => this.changeAbstraction(e.target.value)} />;
+      return (
+        <input
+          onChange={e => this.changeAbstraction(e.target.value)}
+          ref={element => {
+            if (element) {
+              element.focus();
+            }
+          }}
+        />
+      );
     } else {
       return null;
     }
@@ -97,4 +117,45 @@ export class Commands extends React.PureComponent<{
       source: this.props.selected.join(".")
     });
   };
+  private export = () => {
+    download("snippet.yall.json", JSON.stringify(this.props.ast));
+  };
+  private import = async () => {
+    this.insertNode(await readFile());
+  };
+}
+
+function download(filename: string, text: string) {
+  const element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:application/json;charset=utf-8," + encodeURIComponent(text)
+  );
+  element.setAttribute("download", filename);
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+}
+
+function readFile() {
+  return new Promise<Ast>(resolve => {
+    const element = document.createElement("input");
+    element.setAttribute("type", "file");
+    element.setAttribute("accept", ".json");
+    element.style.display = "none";
+    element.addEventListener("change", event => {
+      const file: File = (event as any).target.files[0];
+      const fileReader = new FileReader();
+      fileReader.onload = e => {
+        const text = (e as any).target.result;
+        const json = JSON.parse(text);
+        resolve(json);
+      };
+      fileReader.readAsText(file);
+    });
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  });
 }

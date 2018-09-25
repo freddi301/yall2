@@ -18,13 +18,14 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
   public render() {
     const { ast, selected, evaluationStrategy } = this.state;
     const { path } = this.props;
-    let evaluated: Ast;
+    let evaluated: Ast | Error;
     try {
       evaluated = fromPurescriptAst(
         evaluate[evaluationStrategy](toPurescriptAst(ast))
       );
     } catch (e) {
       evaluated = ast;
+      console.error(e); // tslint:disable-line
     }
     return (
       <div>
@@ -51,9 +52,11 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
           </select>
           <ViewAst
             ast={evaluated}
-            path={path}
-            select={this.select}
-            selected={selected}
+            path={[]}
+            select={() => {
+              return;
+            }}
+            selected={[Symbol().toString()]}
           />
         </div>
       </div>
