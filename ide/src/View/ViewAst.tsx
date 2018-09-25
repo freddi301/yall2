@@ -117,8 +117,7 @@ export class ViewAbstraction extends React.PureComponent<{
     } = this.props;
     return (
       <>
-        <span onClick={select}>(</span>
-        {head}
+        <span onClick={select}>({head}</span>
         <span onClick={select}>→</span>
         {body}
         <span onClick={select}>)</span>

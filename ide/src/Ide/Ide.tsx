@@ -1,3 +1,4 @@
+import { get } from "lodash";
 import * as React from "react";
 import { Ast } from "../Ast/Ast";
 import {
@@ -21,7 +22,7 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
     let evaluated: Ast | Error;
     try {
       evaluated = fromPurescriptAst(
-        evaluate[evaluationStrategy](toPurescriptAst(ast))
+        evaluate[evaluationStrategy](toPurescriptAst(get(ast, selected, ast)))
       );
     } catch (e) {
       evaluated = ast;
@@ -52,7 +53,7 @@ export class Ide extends React.PureComponent<{ path: string[] }, IdeState> {
           </select>
           <ViewAst
             ast={evaluated}
-            path={[]}
+            path={path.concat(selected)}
             select={() => {
               return;
             }}
