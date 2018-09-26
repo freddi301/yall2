@@ -63,12 +63,19 @@ export type DispatchOf<State, Handlers extends ActionHandlers<State>> = <
   action: Action<Name, Payload>
 ) => void;
 
+export type BoundActionCreatorsFrom<Handlers extends ActionHandlers<any>> = {
+  [Type in keyof Handlers]: (
+    payload: ExtractPayoladType<Handlers[Type]>
+  ) => void
+};
+
 export function createStateManagment<State>() {
   return <Handlers extends ActionHandlers<State>>(handlers: Handlers) => {
     return {
       actions: actionsOf(handlers),
       reducer: reducerOf(handlers),
-      dispatch: (null as any) as DispatchOf<State, Handlers>
+      dispatch: (null as any) as DispatchOf<State, Handlers>,
+      boundActions: (null as any) as BoundActionCreatorsFrom<Handlers>
     };
   };
 }

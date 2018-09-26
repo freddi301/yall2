@@ -1,9 +1,15 @@
 import * as React from "react";
-import { Ide } from "./Ide/Ide";
+import { Provider } from "react-redux";
+import { IdeConnected } from "./Ide/Ide";
+import { store } from "./Ide/store";
 
 class App extends React.Component {
   public render() {
-    return <Ide path={[]} />;
+    return (
+      <Provider store={store}>
+        <IdeConnected />
+      </Provider>
+    );
   }
 }
 

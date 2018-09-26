@@ -5,13 +5,20 @@ import registerServiceWorker from "./registerServiceWorker";
 
 const rootElement = document.getElementById("root") as HTMLElement;
 
-ReactDOM.render(<App />, rootElement);
+function render(Component: React.ComponentType<{}>) {
+  ReactDOM.render(<Component />, rootElement);
+}
 
-if ((module as any).hot) {
-  (module as any).hot.accept("./App", () => {
-    const NextApp = require("./App").default;
-    ReactDOM.render(<NextApp />, rootElement);
+render(App);
+
+registerServiceWorker();
+
+if (module.hot) {
+  let NextApp = App;
+  module.hot.accept("./App", () => {
+    NextApp = require("./App").default;
+    render(NextApp);
   });
 }
 
-registerServiceWorker();
+declare const module: NodeModule & { hot: any };
