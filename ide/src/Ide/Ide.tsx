@@ -5,7 +5,7 @@ import { PromiseComponent } from "../Components/PromiseComponent";
 import { evaluate } from "../core/evaluateService";
 import { ViewAst } from "../View/ViewAst";
 import { Commands } from "./Commands";
-import { actions, boundActions, IdeState } from "./store";
+import { actions, boundActions, IdeState } from "./reducer";
 
 export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
   public render() {
