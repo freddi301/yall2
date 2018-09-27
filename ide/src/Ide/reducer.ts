@@ -11,11 +11,11 @@ export interface IdeState {
 }
 
 export const initial: IdeState = {
-  ast: { type: "Reference", identifier: "x", source: "" },
+  ast: { type: "Reference", identifier: "x", source: [] },
   path: [],
   selected: [],
   evaluationStrategy: "symbolic",
-  clipboard: { type: "Reference", identifier: "x", source: "" }
+  clipboard: { type: "Reference", identifier: "x", source: [] }
 };
 
 export const {

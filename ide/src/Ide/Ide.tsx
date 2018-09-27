@@ -25,17 +25,18 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       evaluationStrategy
     });
     return (
-      <div tabIndex={1} ref={element => (element ? element.focus() : null)}>
+      <div>
         <div style={{ display: "flex" }}>
           <div style={{ flexGrow: 2 }}>
             <ViewAst
               ast={ast}
+              parentAst={{ type: "Reference", identifier: "x", source: [] }}
               path={path}
               select={select}
               selected={selected}
             />
           </div>
-          <div style={{ flexGrow: 1 }}>
+          <div style={{ width: "20em" }}>
             <Commands
               ast={ast}
               selected={selected}
@@ -46,29 +47,34 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
           </div>
         </div>
         <div>
-          <select
-            value={evaluationStrategy}
-            onChange={e => setEvaluationStrategy(e.target.value as any)}
-          >
-            <option value="eager">eager</option>
-            <option value="lazy">lazy</option>
-            <option value="symbolic">symbolic</option>
-          </select>
-          <PromiseComponent
-            promise={evaluated}
-            onPending={"working..."}
-            onResolve={resultAst => (
-              <ViewAst
-                ast={resultAst}
-                path={path.concat(selected)}
-                select={() => {
-                  return;
-                }}
-                selected={[Symbol().toString()]}
-              />
-            )}
-            onReject={error => String(error)}
-          />
+          <div>
+            <select
+              value={evaluationStrategy}
+              onChange={e => setEvaluationStrategy(e.target.value as any)}
+            >
+              <option value="eager">eager</option>
+              <option value="lazy">lazy</option>
+              <option value="symbolic">symbolic</option>
+            </select>
+          </div>
+          <div>
+            <PromiseComponent
+              promise={evaluated}
+              onPending={"working..."}
+              onResolve={resultAst => (
+                <ViewAst
+                  ast={resultAst}
+                  parentAst={{ type: "Reference", identifier: "x", source: [] }}
+                  path={path.concat(selected)}
+                  select={() => {
+                    return;
+                  }}
+                  selected={[Symbol().toString()]}
+                />
+              )}
+              onReject={error => String(error)}
+            />
+          </div>
         </div>
       </div>
     );

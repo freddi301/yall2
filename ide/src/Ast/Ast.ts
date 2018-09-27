@@ -1,21 +1,6 @@
-export type Ast = Reference | Application | Abstraction;
+import { Abstraction } from "./Abstraction";
+import { Application } from "./Application";
+import { Reference } from "./Reference";
+import { Where } from "./Where";
 
-export interface Reference {
-  type: "Reference";
-  identifier: string;
-  source: string;
-}
-
-export interface Application {
-  type: "Application";
-  left: Ast;
-  right: Ast;
-  source: string;
-}
-
-export interface Abstraction {
-  type: "Abstraction";
-  head: string;
-  body: Ast;
-  source: string;
-}
+export type Ast = Reference | Application | Abstraction | Where;

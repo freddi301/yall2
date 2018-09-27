@@ -1,9 +1,14 @@
 import { isEqual } from "lodash";
 import * as React from "react";
-import { Abstraction, Application, Ast, Reference } from "../Ast/Ast";
+import { Ast } from "../Ast/Ast";
+import { ViewAbstraction } from "./ViewAbstraction";
+import { ViewApplication } from "./ViewApplication";
+import { ViewReference } from "./ViewReference";
+import { ViewWhere } from "./ViewWhere";
 
 export class ViewAst extends React.PureComponent<{
   ast: Ast;
+  parentAst: Ast;
   path: string[];
   selected: string[];
   select(path: string[]): void;
@@ -13,21 +18,22 @@ export class ViewAst extends React.PureComponent<{
     const isSelected = isEqual(path, selected);
     if (isSelected) {
       return (
-        <span
+        <div
           style={{
             boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.75)",
-            borderRadius: "3px"
+            borderRadius: "3px",
+            display: "inline-block"
           }}
         >
           {this.renderAst()}
-        </span>
+        </div>
       );
     } else {
       return this.renderAst();
     }
   }
   public renderAst() {
-    const { ast, select, path, selected } = this.props;
+    const { ast, select, path, selected, parentAst } = this.props;
     const selectCurrent = () => select(path);
     switch (ast.type) {
       case "Reference":
@@ -37,9 +43,13 @@ export class ViewAst extends React.PureComponent<{
           <ViewApplication
             application={ast}
             select={selectCurrent}
+            showParens={
+              !(parentAst.type === "Application" && parentAst.left === ast)
+            }
             left={
               <ViewAst
                 ast={ast.left}
+                parentAst={ast}
                 path={path.concat("left")}
                 select={select}
                 selected={selected}
@@ -48,6 +58,7 @@ export class ViewAst extends React.PureComponent<{
             right={
               <ViewAst
                 ast={ast.right}
+                parentAst={ast}
                 path={path.concat("right")}
                 select={select}
                 selected={selected}
@@ -60,8 +71,10 @@ export class ViewAst extends React.PureComponent<{
           <ViewAbstraction
             abstraction={ast}
             select={selectCurrent}
+            showParens={parentAst.type !== "Abstraction"}
             body={
               <ViewAst
+                parentAst={ast}
                 selected={selected}
                 ast={ast.body}
                 path={path.concat("body")}
@@ -70,58 +83,31 @@ export class ViewAst extends React.PureComponent<{
             }
           />
         );
+      case "Where":
+        return (
+          <ViewWhere
+            where={ast}
+            select={selectCurrent}
+            body={
+              <ViewAst
+                parentAst={ast}
+                selected={selected}
+                ast={ast.body}
+                path={path.concat("body")}
+                select={select}
+              />
+            }
+            scope={ast.scope.map((abstraction, index) => (
+              <ViewAst
+                parentAst={ast}
+                ast={abstraction}
+                path={path.concat(["scope", String(index)])}
+                select={select}
+                selected={selected}
+              />
+            ))}
+          />
+        );
     }
-  }
-}
-
-export class ViewReference extends React.PureComponent<{
-  reference: Reference;
-  select(): void;
-}> {
-  public render() {
-    const { select } = this.props;
-    return <span onClick={select}>{this.props.reference.identifier}</span>;
-  }
-}
-
-export class ViewApplication extends React.PureComponent<{
-  application: Application;
-  left: React.ReactNode;
-  right: React.ReactNode;
-  select(): void;
-}> {
-  public render() {
-    const { left, right, select } = this.props;
-    return (
-      <>
-        <span onClick={select}>(</span>
-        {left}
-        <span onClick={select}>&nbsp;</span>
-        {right}
-        <span onClick={select}>)</span>
-      </>
-    );
-  }
-}
-
-export class ViewAbstraction extends React.PureComponent<{
-  abstraction: Abstraction;
-  body: React.ReactNode;
-  select(): void;
-}> {
-  public render() {
-    const {
-      abstraction: { head },
-      body,
-      select
-    } = this.props;
-    return (
-      <>
-        <span onClick={select}>({head}</span>
-        <span onClick={select}>→</span>
-        {body}
-        <span onClick={select}>)</span>
-      </>
-    );
   }
 }

@@ -47,6 +47,7 @@ export class PromiseComponent<T> extends React.Component<Props<T>, State<T>> {
     }
   }
   private subscribeToPromise() {
+    // TODO: prevent meory leak
     this.props.promise.then(
       value => this.setState({ status: "resolved", value }),
       value => this.setState({ status: "rejected", value })

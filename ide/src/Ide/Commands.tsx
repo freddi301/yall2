@@ -2,21 +2,25 @@ import { cloneDeep, get, set } from "lodash";
 import * as React from "react";
 import { Ast } from "../Ast/Ast";
 
+// TODO: refactor to codemods
+
 export class Commands extends React.PureComponent<{
   ast: Ast;
   selected: string[];
   replace(ast: Ast): void;
   clipboard: Ast;
-  clip(ast: Ast): void
+  clip(ast: Ast): void;
 }> {
   public render() {
     return (
       <>
         {this.modifyReference()}
         {this.modifyAbstraction()}
+        {this.modifyWhere()}
         <button onClick={this.insertReference}>insert Reference</button>
         <button onClick={this.insertApplication}>insert Application</button>
         <button onClick={this.insertAbstraction}>insert Abstraction</button>
+        <button onClick={this.insertWhere}>insert Where</button>
         <button onClick={this.copy}>copy</button>
         <button onClick={this.paste}>paste</button>
         <button onClick={this.export}>export</button>
@@ -38,7 +42,7 @@ export class Commands extends React.PureComponent<{
     this.insertNode({
       type: "Reference",
       identifier: "x",
-      source: this.props.selected.join(".")
+      source: this.props.selected
     });
   };
   private insertApplication = () => {
@@ -47,14 +51,14 @@ export class Commands extends React.PureComponent<{
       left: {
         type: "Reference",
         identifier: "x",
-        source: this.props.selected.concat("left").join(".")
+        source: this.props.selected.concat("left")
       },
       right: {
         type: "Reference",
         identifier: "x",
-        source: this.props.selected.concat("right").join(".")
+        source: this.props.selected.concat("right")
       },
-      source: this.props.selected.join(".")
+      source: this.props.selected
     });
   };
   private insertAbstraction = () => {
@@ -64,9 +68,32 @@ export class Commands extends React.PureComponent<{
       body: {
         type: "Reference",
         identifier: "x",
-        source: this.props.selected.concat("body").join(".")
+        source: this.props.selected.concat("body")
       },
-      source: ""
+      source: []
+    });
+  };
+  private insertWhere = () => {
+    this.insertNode({
+      type: "Where",
+      body: {
+        type: "Reference",
+        identifier: "x",
+        source: this.props.selected.concat("body")
+      },
+      scope: [
+        {
+          type: "Abstraction",
+          head: "x",
+          body: {
+            type: "Reference",
+            identifier: "x",
+            source: this.props.selected.concat("body")
+          },
+          source: []
+        }
+      ],
+      source: []
     });
   };
   private modifyReference() {
@@ -91,7 +118,7 @@ export class Commands extends React.PureComponent<{
     this.insertNode({
       type: "Reference",
       identifier,
-      source: this.props.selected.join(".")
+      source: this.props.selected
     });
   };
   private modifyAbstraction() {
@@ -118,8 +145,39 @@ export class Commands extends React.PureComponent<{
       type: "Abstraction",
       head,
       body: get(ast, selected.concat("body")),
-      source: this.props.selected.join(".")
+      source: this.props.selected
     });
+  };
+  // TODO: complete where codemods
+  private modifyWhere() {
+    const { ast, selected } = this.props;
+    const node: Ast = get(ast, selected, ast);
+    if (node.type === "Where") {
+      return (
+        <>
+          <button onClick={this.addEntry}>add entry</button>
+        </>
+      );
+    } else {
+      return null;
+    }
+  }
+  private addEntry = () => {
+    const { ast, selected } = this.props;
+    const node: Ast = get(ast, selected, ast);
+    if (node.type === "Where") {
+      this.insertNode({
+        ...node,
+        scope: node.scope.concat({
+          type: "Abstraction",
+          head: "x" + String(Math.random()).slice(2, 6),
+          body: get(ast, selected.concat("body")),
+          source: this.props.selected
+        })
+      });
+    } else {
+      return;
+    }
   };
   private export = () => {
     download("snippet.yall.json", JSON.stringify(this.props.ast));
@@ -128,13 +186,13 @@ export class Commands extends React.PureComponent<{
     this.insertNode(await readFile());
   };
   private copy = () => {
-    const {ast,clip,selected} = this.props;
-    clip(get(ast,selected,ast))
+    const { ast, clip, selected } = this.props;
+    clip(get(ast, selected, ast));
   };
   private paste = () => {
-    const {clipboard}=this.props;
-    this.insertNode(clipboard)
-  }
+    const { clipboard } = this.props;
+    this.insertNode(clipboard);
+  };
 }
 
 function download(filename: string, text: string) {
