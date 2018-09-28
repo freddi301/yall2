@@ -8,20 +8,8 @@ There is lot of sperimental stuff, look into the source
 
 ## Install
 
-clone repo
-
-build language:
-
 ```bash
-cd language
-yarn
-yarn pulp build
-```
-
-run ide:
-
-```bash
-cd ide
-yarn
+git clone https://github.com/freddi301/yall2.git
+cd yall2
 yarn start
 ```
