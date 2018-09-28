@@ -6,6 +6,9 @@ import { evaluate } from "../core/evaluateService";
 import { ViewAst } from "../View/ViewAst";
 import { Commands } from "./Commands";
 import { actions, boundActions, IdeState } from "./reducer";
+import { Ast } from "../Ast/Ast";
+
+const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 
 export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
   public render() {
@@ -28,10 +31,10 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
             <div style={{ borderBottom: "1px solid var(--lighter-dark)" }}>
               source
             </div>
-            <div style={{ overflow: "hidden" }}>
+            <div>
               <ViewAst
                 ast={ast}
-                parentAst={{ type: "Reference", identifier: "root" }}
+                parentAst={ROOT_AST}
                 path={path}
                 select={select}
                 selected={selected}
@@ -61,12 +64,12 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
               onResolve={resultAst => (
                 <ViewAst
                   ast={resultAst}
-                  parentAst={{ type: "Reference", identifier: "x" }}
+                  parentAst={ROOT_AST}
                   path={path.concat(selected)}
                   select={() => {
                     return;
                   }}
-                  selected={[Symbol().toString()]}
+                  selected={[]}
                 />
               )}
               onReject={error => String(error)}

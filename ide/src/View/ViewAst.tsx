@@ -4,6 +4,7 @@ import { Ast } from "../Ast/Ast";
 import { ViewAbstraction } from "./ViewAbstraction";
 import { ViewApplication } from "./ViewApplication";
 import { ViewReference } from "./ViewReference";
+import { Highlight } from "./Highlight";
 
 export class ViewAst extends React.PureComponent<{
   ast: Ast;
@@ -16,22 +17,7 @@ export class ViewAst extends React.PureComponent<{
     const { path, selected } = this.props;
     const isSelected = isEqual(path, selected);
     if (isSelected) {
-      return (
-        <div
-          style={{
-            boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.9)",
-            borderRadius: "4px",
-            display: "inline-block",
-            marginLeft: "-3px",
-            marginRight: "-3px",
-            paddingLeft: "3px",
-            paddingRight: "3px",
-            backgroundColor: "rgba(255,255,255,0.05)"
-          }}
-        >
-          {this.renderAst()}
-        </div>
-      );
+      return <Highlight>{this.renderAst()}</Highlight>;
     } else {
       return this.renderAst();
     }

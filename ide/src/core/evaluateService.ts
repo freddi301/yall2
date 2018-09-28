@@ -5,7 +5,7 @@ import { EvaluationStrategy } from "./purescript";
 export function evaluate(args: {
   ast: Ast;
   evaluationStrategy: EvaluationStrategy;
-}): Promise<Ast> {
+}): Promise<Ast & { source: string[] }> {
   return new Promise((resolve, reject) => {
     const worker = new Worker();
     worker.onmessage = ({ data }) => {
