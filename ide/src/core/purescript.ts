@@ -20,8 +20,6 @@ export function toPurescriptAst(ast: Ast): PurescriptAst {
       return Abstraction.create(ast.head)(toPurescriptAst(ast.body))(
         ast.source
       );
-    case "Where":
-      return toPurescriptAst(ast.body); // TODO: transform where entries
   }
 }
 

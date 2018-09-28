@@ -6,7 +6,6 @@ import Export from "./Export";
 import Import from "./Import";
 import InsertReference from "./InsertReference";
 import InsertApplication from "./InsertApplication";
-import Where from "./Where";
 import InsertAbstraction from "./InsertAbstraction";
 
 export const codemods: Codemod[] = [
@@ -16,8 +15,7 @@ export const codemods: Codemod[] = [
   Import,
   InsertReference,
   InsertApplication,
-  InsertAbstraction,
-  ...Where
+  InsertAbstraction
 ];
 
 const duplicates = _.difference(codemods, _.uniqBy(codemods, "id"));

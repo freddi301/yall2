@@ -4,7 +4,6 @@ import { Ast } from "../Ast/Ast";
 import { ViewAbstraction } from "./ViewAbstraction";
 import { ViewApplication } from "./ViewApplication";
 import { ViewReference } from "./ViewReference";
-import { ViewWhere } from "./ViewWhere";
 
 export class ViewAst extends React.PureComponent<{
   ast: Ast;
@@ -86,31 +85,6 @@ export class ViewAst extends React.PureComponent<{
                 select={select}
               />
             }
-          />
-        );
-      case "Where":
-        return (
-          <ViewWhere
-            where={ast}
-            select={selectCurrent}
-            body={
-              <ViewAst
-                parentAst={ast}
-                selected={selected}
-                ast={ast.body}
-                path={path.concat("body")}
-                select={select}
-              />
-            }
-            scope={ast.scope.map((abstraction, index) => (
-              <ViewAst
-                parentAst={ast}
-                ast={abstraction}
-                path={path.concat(["scope", String(index)])}
-                select={select}
-                selected={selected}
-              />
-            ))}
           />
         );
     }
