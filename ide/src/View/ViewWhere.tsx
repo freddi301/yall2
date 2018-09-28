@@ -16,9 +16,26 @@ export class ViewWhere extends React.PureComponent<
     const { viewScope } = this.state;
     return (
       <div>
-        <div>
-          {body} <span onClick={select}>where</span>{" "}
-          <span onClick={this.toggle}>{viewScope ? "-" : "+"}</span>
+        <div>{body}</div>
+        <div style={{ display: "flex" }}>
+          <div
+            onClick={select}
+            style={{
+              width: "8px",
+              height: "4px",
+              backgroundColor: "var(--white-text)",
+              marginRight: "2px"
+            }}
+          />
+          <div
+            onClick={this.toggle}
+            style={{
+              minWidth: "8px",
+              flexGrow: 1,
+              height: "4px",
+              backgroundColor: "var(--white-text)"
+            }}
+          />
         </div>
         {viewScope
           ? scope.map((entry, index) => (

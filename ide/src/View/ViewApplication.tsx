@@ -10,13 +10,13 @@ export class ViewApplication extends React.PureComponent<{
   public render() {
     const { left, right, select, showParens } = this.props;
     return (
-      <>
-        {showParens ? <span onClick={select}>(</span> : null}
+      <div style={{ display: "flex" }}>
+        {showParens ? <div onClick={select}>(</div> : null}
         {left}
-        <span onClick={select}>&nbsp;</span>
+        <div onClick={select}>&nbsp;</div>
         {right}
-        {showParens ? <span onClick={select}>)</span> : null}
-      </>
+        {showParens ? <div onClick={select}>)</div> : null}
+      </div>
     );
   }
 }

@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
-import { PromiseComponent } from "../Components/PromiseComponent";
+import { PromiseComponent } from "../components/PromiseComponent";
 import { evaluate } from "../core/evaluateService";
 import { ViewAst } from "../View/ViewAst";
 import { Commands } from "./Commands";
@@ -13,12 +13,9 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       ast,
       selected,
       evaluationStrategy,
-      clipboard,
       path,
-      clip,
       setEvaluationStrategy,
-      select,
-      replace
+      select
     } = this.props;
     const evaluated = evaluate({
       ast: get(ast, selected, ast),
@@ -28,26 +25,26 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       <div>
         <div style={{ display: "flex" }}>
           <div style={{ flexGrow: 2 }}>
-            <ViewAst
-              ast={ast}
-              parentAst={{ type: "Reference", identifier: "x", source: [] }}
-              path={path}
-              select={select}
-              selected={selected}
-            />
+            <div style={{ borderBottom: "1px solid var(--lighter-dark)" }}>
+              source
+            </div>
+            <div style={{ overflow: "hidden" }}>
+              <ViewAst
+                ast={ast}
+                parentAst={{ type: "Reference", identifier: "x", source: [] }}
+                path={path}
+                select={select}
+                selected={selected}
+              />
+            </div>
           </div>
           <div style={{ width: "20em" }}>
-            <Commands
-              ast={ast}
-              selected={selected}
-              replace={replace}
-              clipboard={clipboard}
-              clip={clip}
-            />
+            <Commands {...this.props} />
           </div>
         </div>
         <div>
-          <div>
+          <div style={{ borderBottom: "1px solid var(--lighter-dark)" }}>
+            evaluation strategy:
             <select
               value={evaluationStrategy}
               onChange={e => setEvaluationStrategy(e.target.value as any)}

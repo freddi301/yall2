@@ -15,15 +15,15 @@ export class ViewAbstraction extends React.PureComponent<{
       showParens
     } = this.props;
     return (
-      <>
-        <span onClick={select}>
+      <div style={{ display: "flex" }}>
+        <div onClick={select}>
           {showParens ? "(" : null}
           {head}
-        </span>
-        <span onClick={select}>→</span>
+        </div>
+        <div onClick={select}>→</div>
         {body}
-        {showParens ? <span onClick={select}>)</span> : null}
-      </>
+        {showParens ? <div onClick={select}>)</div> : null}
+      </div>
     );
   }
 }
