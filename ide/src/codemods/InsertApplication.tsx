@@ -16,15 +16,12 @@ class InsertApplication extends React.PureComponent<
       type: "Application",
       left: {
         type: "Reference",
-        identifier: "x",
-        source: this.props.selected.concat("left")
+        identifier: "x"
       },
       right: {
         type: "Reference",
-        identifier: "x",
-        source: this.props.selected.concat("right")
-      },
-      source: this.props.selected
+        identifier: "x"
+      }
     });
   };
 }

@@ -36,8 +36,7 @@ class ModifyReference extends React.PureComponent<
     if (this.state.text !== null) {
       insertNode(this.props, {
         type: "Reference",
-        identifier: this.state.text,
-        source: []
+        identifier: this.state.text
       });
     }
     event.preventDefault();

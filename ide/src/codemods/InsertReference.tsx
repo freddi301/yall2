@@ -12,8 +12,7 @@ class InsertReference extends React.PureComponent<
   private insertReference = () => {
     insertNode(this.props, {
       type: "Reference",
-      identifier: "x",
-      source: this.props.selected
+      identifier: "x"
     });
   };
 }

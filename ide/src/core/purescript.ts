@@ -8,22 +8,23 @@ import {
 
 type PurescriptAst = any;
 
+// TODO: add source based on path
 export function toPurescriptAst(ast: Ast): PurescriptAst {
   switch (ast.type) {
     case "Reference":
-      return Reference.create(ast.identifier)(ast.source);
+      return Reference.create(ast.identifier)([]);
     case "Application":
       return Application.create(toPurescriptAst(ast.left))(
         toPurescriptAst(ast.right)
-      )(ast.source);
+      )([]);
     case "Abstraction":
-      return Abstraction.create(ast.head)(toPurescriptAst(ast.body))(
-        ast.source
-      );
+      return Abstraction.create(ast.head)(toPurescriptAst(ast.body))([]);
   }
 }
 
-export function fromPurescriptAst(ast: PurescriptAst): Ast {
+export function fromPurescriptAst(
+  ast: PurescriptAst
+): Ast & { source: string[] } {
   if (ast instanceof Reference) {
     return { type: "Reference", identifier: ast.value0, source: ast.value1 };
   } else if (ast instanceof Application) {

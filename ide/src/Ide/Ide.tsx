@@ -31,7 +31,7 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
             <div style={{ overflow: "hidden" }}>
               <ViewAst
                 ast={ast}
-                parentAst={{ type: "Reference", identifier: "x", source: [] }}
+                parentAst={{ type: "Reference", identifier: "root" }}
                 path={path}
                 select={select}
                 selected={selected}
@@ -61,7 +61,7 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
               onResolve={resultAst => (
                 <ViewAst
                   ast={resultAst}
-                  parentAst={{ type: "Reference", identifier: "x", source: [] }}
+                  parentAst={{ type: "Reference", identifier: "x" }}
                   path={path.concat(selected)}
                   select={() => {
                     return;

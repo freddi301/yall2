@@ -19,10 +19,8 @@ class InsertAbstraction extends React.PureComponent<
       head: "x",
       body: {
         type: "Reference",
-        identifier: "x",
-        source: this.props.selected.concat("body")
-      },
-      source: []
+        identifier: "x"
+      }
     });
   };
 }

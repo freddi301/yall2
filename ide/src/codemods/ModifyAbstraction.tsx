@@ -38,8 +38,7 @@ class ModifyAbstraction extends React.PureComponent<
       insertNode(this.props, {
         type: "Abstraction",
         head: this.state.text,
-        body: get(ast, selected.concat("body")),
-        source: []
+        body: get(ast, selected.concat("body"))
       });
     }
     event.preventDefault();

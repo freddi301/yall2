@@ -4,5 +4,4 @@ export interface Abstraction {
   type: "Abstraction";
   head: string;
   body: Ast;
-  source: string[];
 }
