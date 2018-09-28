@@ -6,13 +6,15 @@ import { ViewApplication } from "./ViewApplication";
 import { ViewReference } from "./ViewReference";
 import { Highlight } from "./Highlight";
 
-export class ViewAst extends React.PureComponent<{
+interface Props {
   ast: Ast;
   parentAst: Ast;
   path: string[];
   selected: string[];
   select(path: string[]): void;
-}> {
+}
+
+export class ViewAst extends React.PureComponent<Props> {
   public render() {
     const { path, selected } = this.props;
     const isSelected = isEqual(path, selected);
