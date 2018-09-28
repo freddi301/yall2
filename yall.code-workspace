@@ -1,14 +1,17 @@
 {
-	"folders": [
-		{
-			"path": "ide"
-		},
-		{
-			"path": "language"
-		}
-	],
-	"settings": {
-		"editor.tabSize": 2,
-		"editor.formatOnSave": true
-	}
+  "folders": [
+    {
+      "path": "ide"
+    },
+    {
+      "path": "language"
+    },
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  }
 }
