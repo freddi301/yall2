@@ -20,7 +20,7 @@ export class ViewAbstraction extends React.PureComponent<{
           {showParens ? "(" : null}
           {head}
         </div>
-        <div onClick={select}>→</div>
+        <div onClick={select}>&nbsp;→&nbsp;</div>
         {body}
         {showParens ? <div onClick={select}>)</div> : null}
       </div>

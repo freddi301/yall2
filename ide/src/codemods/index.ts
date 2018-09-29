@@ -7,6 +7,8 @@ import Import from "./Import";
 import InsertReference from "./InsertReference";
 import InsertApplication from "./InsertApplication";
 import InsertAbstraction from "./InsertAbstraction";
+import Copy from "./Copy";
+import Paste from "./Paste";
 
 export const codemods: Codemod[] = [
   ModifyReference,
@@ -15,7 +17,9 @@ export const codemods: Codemod[] = [
   Import,
   InsertReference,
   InsertApplication,
-  InsertAbstraction
+  InsertAbstraction,
+  Copy,
+  Paste
 ];
 
 const duplicates = _.difference(codemods, _.uniqBy(codemods, "id"));

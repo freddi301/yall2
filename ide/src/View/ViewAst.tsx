@@ -36,7 +36,10 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
             application={ast}
             select={this.selectCurrent}
             showParens={
-              !(parentAst.type === "Application" && parentAst.left === ast)
+              !(
+                (parentAst.type === "Application" && parentAst.left === ast) ||
+                parentAst.type === "Abstraction"
+              )
             }
             left={
               <ViewAst
