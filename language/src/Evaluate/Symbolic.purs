@@ -1,46 +1,19 @@
-module Yall.Evaluate where
+module Yall.Evaluate.Symbolic where
 
 import Yall.Pauseable (class Pauseable, end, wait, (|>))
 import Yall.Ast (Ast(..))
-import Yall.Ast.Source as AstSource
 import Yall.Reify (reify)
-import Prelude (class Eq, class Ord, const, flip, not, unit, ($), (&&), (+), (==))
+import Prelude (class Eq, class Ord, flip, not, ($), (&&), (+), (==))
 import Data.Set as Set
 
 bind ∷ ∀ container content . Pauseable container ⇒ container content → (content → container content) → container content
 bind = flip wait
 
--- | Eager evaluation
-eager ∷ ∀ container reference source . Eq reference ⇒ Pauseable container ⇒
-  Ast reference source → container (Ast reference source)
-eager term@(Application _ (Reference _ _) _) = end term -- infinite recursion due to free variable guard
-eager term@(Application (Reference _ _) _ _) = end term -- infinite recursion due to free variable guard
--- TODO: guard for Y fixed point combinator useage
-eager (Application left@(Abstraction head body _) right _) | left `isAstEquivalent` right = end $ reify head right body -- infinite recursion due to Y fixed combinator guard
-eager (Application (Abstraction head body _) right@(Abstraction _ _ _) _) =
-  eager |> reify head right body
-eager (Application left right source) = do
-  left ← eager |> left
-  right ← eager |> right
-  eager |> Application left right source
-eager term = end term
-
--- | Lazy evaluation
-lazy ∷ ∀ container reference source . Eq reference ⇒ Pauseable container ⇒
-  Ast reference source → container (Ast reference source)
-lazy term@(Application _ (Reference _ _) _) = end term -- infinite recursion due to free variable guard
-lazy term@(Application (Reference _ _) _ _) = end term -- infinite recursion due to free variable guard
-lazy (Application (Abstraction head body _) right _) =
-  lazy |> reify head right body
-lazy (Application left right source) = do
-  left ← lazy |> left
-  lazy |> Application left right source
-lazy term = end term
-
 -- | Symbolic evaluation
 symbolic ∷ ∀ container reference source .
   Eq reference ⇒ Ord reference ⇒ Pauseable container ⇒
   Int → Ast (Symbol reference Int) source → container (Ast (Symbol reference Int) source)
+
 symbolic nextSymbol ast = result where
   term = ηConversion ast
   recursive = symbolic nextSymbol
@@ -77,8 +50,3 @@ symbolic nextSymbol ast = result where
 data Symbol reference variation = Symbol reference variation
 derive instance eqSymbol ∷ (Eq reference, Eq variation) ⇒ Eq (Symbol reference variation)
 derive instance ordSymbol ∷ (Ord reference, Ord variation) ⇒ Ord (Symbol reference variation)
-
-isAstEquivalent :: ∀ reference source . Eq reference ⇒
-  Ast reference source → Ast reference source → Boolean
-isAstEquivalent a b = (stripSource a) == (stripSource b) where
-  stripSource = AstSource.map (const unit)
