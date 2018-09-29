@@ -6,6 +6,8 @@ import { actions, boundActions, IdeState } from "./reducer";
 import { Ast } from "../Ast/Ast";
 import { ViewResult } from "./ViewResult";
 import { get } from "lodash";
+import { Debugger } from "./Debugger";
+import { debug, toPurescriptAst } from "../core/purescript";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 
@@ -63,6 +65,28 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
               path={path}
               evaluationStrategy={evaluationStrategy}
               select={select}
+            />
+          </div>
+          <div>
+            <Debugger
+              label="eager"
+              select={select}
+              stepper={debug.eager(
+                toPurescriptAst({
+                  ast: get(ast, selectedForEvaluation, ast),
+                  path
+                })
+              )}
+            />
+            <Debugger
+              label="lazy"
+              select={select}
+              stepper={debug.lazy(
+                toPurescriptAst({
+                  ast: get(ast, selectedForEvaluation, ast),
+                  path
+                })
+              )}
             />
           </div>
         </div>

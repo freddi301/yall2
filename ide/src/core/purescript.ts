@@ -3,12 +3,14 @@ import { Abstraction, Application, Reference } from "../language/Yall.Ast";
 import {
   evaluateEager,
   evaluateLazy,
-  evaluateSymbolic
+  evaluateSymbolic,
+  debugEager,
+  debugLazy
 } from "../language/Yall.External";
+import { Intermediate, End } from "../language/Yall.Pauseable";
 
 type PurescriptAst = any;
 
-// TODO: add source based on path
 export function toPurescriptAst({
   ast,
   path
@@ -67,3 +69,26 @@ export const evaluate = {
 };
 
 export type EvaluationStrategy = keyof (typeof evaluate);
+
+function debuggerFactory(debug: (ast: any) => any) {
+  function* stepper(ast: PurescriptAst): IterableIterator<PurescriptAst> {
+    let step = debug(ast);
+    while (true) {
+      if (step instanceof End) {
+        yield step.value0;
+        return;
+      } else if (step instanceof Intermediate) {
+        yield step.value0;
+        step = step.value1(step.value0);
+      } else {
+        throw new Error("Debugger error");
+      }
+    }
+  }
+  return stepper;
+}
+
+export const debug = {
+  eager: debuggerFactory(debugEager),
+  lazy: debuggerFactory(debugLazy)
+};
