@@ -1,11 +1,10 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { PromiseComponent } from "../components/PromiseComponent";
-import { evaluate } from "../core/evaluateService";
 import { ViewAst, ViewAstProps } from "../View/ViewAst";
 import { Commands } from "./Commands";
 import { actions, boundActions, IdeState } from "./reducer";
 import { Ast } from "../Ast/Ast";
+import { ViewResult } from "./ViewResult";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 
@@ -19,11 +18,7 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       setEvaluationStrategy,
       select
     } = this.props;
-    const evaluated = evaluate({
-      ast,
-      evaluationStrategy,
-      path
-    });
+
     return (
       <div>
         <div style={{ display: "flex" }}>
@@ -59,22 +54,11 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
             </select>
           </div>
           <div>
-            <PromiseComponent
-              promise={evaluated}
-              onPending={"working..."}
-              onResolve={resultAst => {
-                return (
-                  <ViewAst
-                    ast={resultAst}
-                    parentAst={ROOT_AST}
-                    path={[]}
-                    select={select}
-                    onSelect={selectSource}
-                    selected={[]}
-                  />
-                );
-              }}
-              onReject={error => String(error)}
+            <ViewResult
+              ast={ast}
+              path={path}
+              evaluationStrategy={evaluationStrategy}
+              select={select}
             />
           </div>
         </div>
@@ -85,10 +69,6 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
 
 function selectPath({ select, path }: ViewAstProps) {
   select(path);
-}
-
-function selectSource({ select, ast }: ViewAstProps) {
-  select((ast as any).source);
 }
 
 export const IdeConnected = connect(

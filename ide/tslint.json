@@ -15,6 +15,7 @@
     "callable-types": false,
     "ordered-imports": false,
     "jsx-no-lambda": false,
-    "member-ordering": false
+    "member-ordering": false,
+    "no-shadowed-variable": false
   }
 }
