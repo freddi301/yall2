@@ -7,13 +7,20 @@ interface Props<T> {
   onReject?(value: unknown): React.ReactNode;
 }
 
-type State<T> =
+type PromiseState<T> =
   | { status: "resolved"; value: T }
   | { status: "pending" }
   | { status: "rejected"; value: unknown };
 
+type State<T> = { set?(state: PromiseState<T>): void } & PromiseState<T>;
+
 export class PromiseComponent<T> extends React.Component<Props<T>, State<T>> {
-  public state: State<T> = { status: "pending" };
+  public state: State<T> = {
+    status: "pending",
+    set: (state: PromiseState<T>) => {
+      this.setState(({ set }) => ({ ...state, set }));
+    }
+  };
   public render() {
     const { onResolve, onReject, onPending } = this.props;
     switch (this.state.status) {
@@ -47,10 +54,22 @@ export class PromiseComponent<T> extends React.Component<Props<T>, State<T>> {
     }
   }
   private subscribeToPromise() {
-    // TODO: prevent meory leak
     this.props.promise.then(
-      value => this.setState({ status: "resolved", value }),
-      value => this.setState({ status: "rejected", value })
+      value => {
+        const { set } = this.state;
+        if (set) {
+          set({ status: "resolved", value });
+        }
+      },
+      value => {
+        const { set } = this.state;
+        if (set) {
+          set({ status: "rejected", value });
+        }
+      }
     );
+  }
+  public componentWillUnmount() {
+    this.setState({ set: undefined });
   }
 }

@@ -27,15 +27,14 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
   }
   public renderAst() {
     const { ast, select, path, selected, parentAst, onSelect } = this.props;
-    const selectCurrent = () => onSelect(this.props);
     switch (ast.type) {
       case "Reference":
-        return <ViewReference reference={ast} select={selectCurrent} />;
+        return <ViewReference reference={ast} select={this.selectCurrent} />;
       case "Application":
         return (
           <ViewApplication
             application={ast}
-            select={selectCurrent}
+            select={this.selectCurrent}
             showParens={
               !(parentAst.type === "Application" && parentAst.left === ast)
             }
@@ -65,7 +64,7 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
         return (
           <ViewAbstraction
             abstraction={ast}
-            select={selectCurrent}
+            select={this.selectCurrent}
             showParens={parentAst.type !== "Abstraction"}
             body={
               <ViewAst
@@ -81,4 +80,5 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
         );
     }
   }
+  private selectCurrent = () => this.props.onSelect(this.props);
 }

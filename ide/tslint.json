@@ -14,8 +14,8 @@
     "object-literal-sort-keys": false,
     "callable-types": false,
     "ordered-imports": false,
-    "jsx-no-lambda": false,
+    "jsx-no-lambda": false, // TODO: respect
     "member-ordering": false,
-    "no-shadowed-variable": false
+    "no-shadowed-variable": false // TODO: respect
   }
 }

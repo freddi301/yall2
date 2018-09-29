@@ -5,6 +5,7 @@ import { Commands } from "./Commands";
 import { actions, boundActions, IdeState } from "./reducer";
 import { Ast } from "../Ast/Ast";
 import { ViewResult } from "./ViewResult";
+import { get } from "lodash";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 
@@ -16,9 +17,9 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       evaluationStrategy,
       path,
       setEvaluationStrategy,
-      select
+      select,
+      selectedForEvaluation
     } = this.props;
-
     return (
       <div>
         <div style={{ display: "flex" }}>
@@ -52,10 +53,13 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
               <option value="lazy">lazy</option>
               <option value="symbolic">symbolic</option>
             </select>
+            <button onClick={this.selectForEvaluation}>
+              evaluate selected
+            </button>
           </div>
           <div>
             <ViewResult
-              ast={ast}
+              ast={get(ast, selectedForEvaluation, ast)}
               path={path}
               evaluationStrategy={evaluationStrategy}
               select={select}
@@ -65,6 +69,10 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       </div>
     );
   }
+  private selectForEvaluation = () => {
+    const { selected, selectForEvaluation } = this.props;
+    selectForEvaluation(selected);
+  };
 }
 
 function selectPath({ select, path }: ViewAstProps) {
