@@ -6,15 +6,16 @@ import { ViewApplication } from "./ViewApplication";
 import { ViewReference } from "./ViewReference";
 import { Highlight } from "./Highlight";
 
-interface Props {
+export interface ViewAstProps {
   ast: Ast;
   parentAst: Ast;
   path: string[];
   selected: string[];
   select(path: string[]): void;
+  onSelect(props: ViewAstProps): void;
 }
 
-export class ViewAst extends React.PureComponent<Props> {
+export class ViewAst extends React.PureComponent<ViewAstProps> {
   public render() {
     const { path, selected } = this.props;
     const isSelected = isEqual(path, selected);
@@ -25,8 +26,8 @@ export class ViewAst extends React.PureComponent<Props> {
     }
   }
   public renderAst() {
-    const { ast, select, path, selected, parentAst } = this.props;
-    const selectCurrent = () => select(path);
+    const { ast, select, path, selected, parentAst, onSelect } = this.props;
+    const selectCurrent = () => onSelect(this.props);
     switch (ast.type) {
       case "Reference":
         return <ViewReference reference={ast} select={selectCurrent} />;
@@ -44,6 +45,7 @@ export class ViewAst extends React.PureComponent<Props> {
                 parentAst={ast}
                 path={path.concat("left")}
                 select={select}
+                onSelect={onSelect}
                 selected={selected}
               />
             }
@@ -53,6 +55,7 @@ export class ViewAst extends React.PureComponent<Props> {
                 parentAst={ast}
                 path={path.concat("right")}
                 select={select}
+                onSelect={onSelect}
                 selected={selected}
               />
             }
@@ -71,6 +74,7 @@ export class ViewAst extends React.PureComponent<Props> {
                 ast={ast.body}
                 path={path.concat("body")}
                 select={select}
+                onSelect={onSelect}
               />
             }
           />

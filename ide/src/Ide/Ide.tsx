@@ -1,9 +1,8 @@
-import { get } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 import { PromiseComponent } from "../components/PromiseComponent";
 import { evaluate } from "../core/evaluateService";
-import { ViewAst } from "../View/ViewAst";
+import { ViewAst, ViewAstProps } from "../View/ViewAst";
 import { Commands } from "./Commands";
 import { actions, boundActions, IdeState } from "./reducer";
 import { Ast } from "../Ast/Ast";
@@ -21,8 +20,9 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       select
     } = this.props;
     const evaluated = evaluate({
-      ast: get(ast, selected, ast),
-      evaluationStrategy
+      ast,
+      evaluationStrategy,
+      path
     });
     return (
       <div>
@@ -37,6 +37,7 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
                 parentAst={ROOT_AST}
                 path={path}
                 select={select}
+                onSelect={selectPath}
                 selected={selected}
               />
             </div>
@@ -61,17 +62,18 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
             <PromiseComponent
               promise={evaluated}
               onPending={"working..."}
-              onResolve={resultAst => (
-                <ViewAst
-                  ast={resultAst}
-                  parentAst={ROOT_AST}
-                  path={path.concat(selected)}
-                  select={() => {
-                    return;
-                  }}
-                  selected={[]}
-                />
-              )}
+              onResolve={resultAst => {
+                return (
+                  <ViewAst
+                    ast={resultAst}
+                    parentAst={ROOT_AST}
+                    path={[]}
+                    select={select}
+                    onSelect={selectSource}
+                    selected={[]}
+                  />
+                );
+              }}
               onReject={error => String(error)}
             />
           </div>
@@ -79,6 +81,14 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       </div>
     );
   }
+}
+
+function selectPath({ select, path }: ViewAstProps) {
+  select(path);
+}
+
+function selectSource({ select, ast }: ViewAstProps) {
+  select((ast as any).source);
 }
 
 export const IdeConnected = connect(

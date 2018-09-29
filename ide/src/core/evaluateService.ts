@@ -4,6 +4,7 @@ import { EvaluationStrategy } from "./purescript";
 
 export function evaluate(args: {
   ast: Ast;
+  path: string[];
   evaluationStrategy: EvaluationStrategy;
 }): Promise<Ast & { source: string[] }> {
   return new Promise((resolve, reject) => {
