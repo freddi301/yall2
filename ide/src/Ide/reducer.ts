@@ -16,7 +16,7 @@ export const initial: IdeState = {
   path: [],
   selected: [],
   selectedForEvaluation: [],
-  evaluationStrategy: "symbolic",
+  evaluationStrategy: "eager",
   clipboard: { type: "Reference", identifier: "x" }
 };
 

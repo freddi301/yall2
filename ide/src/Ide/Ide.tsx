@@ -4,10 +4,9 @@ import { ViewAst, ViewAstProps } from "../View/ViewAst";
 import { Commands } from "./Commands";
 import { actions, boundActions, IdeState } from "./reducer";
 import { Ast } from "../Ast/Ast";
-import { ViewResult } from "./ViewResult";
 import { get } from "lodash";
 import { Debugger } from "./Debugger";
-import { debug, toPurescriptAst } from "../core/purescript";
+import { Runner } from "./Runner";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 
@@ -19,16 +18,12 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       evaluationStrategy,
       path,
       setEvaluationStrategy,
-      select,
-      selectedForEvaluation
+      select
     } = this.props;
     return (
-      <div>
-        <div style={{ display: "flex" }}>
+      <>
+        <div style={{ display: "flex", height: "70%" }}>
           <div style={{ flexGrow: 2 }}>
-            <div style={{ borderBottom: "1px solid var(--lighter-dark)" }}>
-              source
-            </div>
             <div>
               <ViewAst
                 ast={ast}
@@ -44,59 +39,28 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
             <Commands {...this.props} />
           </div>
         </div>
-        <div>
-          <div style={{ borderBottom: "1px solid var(--lighter-dark)" }}>
-            evaluation strategy:
-            <select
-              value={evaluationStrategy}
-              onChange={e => setEvaluationStrategy(e.target.value as any)}
-            >
-              <option value="eager">eager</option>
-              <option value="lazy">lazy</option>
-              <option value="symbolic">symbolic</option>
-            </select>
-            <button onClick={this.selectForEvaluation}>
-              evaluate selected
-            </button>
-          </div>
-          <div>
-            <ViewResult
-              ast={get(ast, selectedForEvaluation, ast)}
+        <div style={{ display: "flex", height: "30%" }}>
+          <div style={{ width: "50%" }}>
+            <Runner
+              ast={get(ast, selected, ast)}
               path={path}
-              evaluationStrategy={evaluationStrategy}
               select={select}
+              evaluationStrategy={evaluationStrategy}
+              setEvaluationStrategy={setEvaluationStrategy}
             />
           </div>
-          <div>
+          <div style={{ width: "50%" }}>
             <Debugger
-              label="eager"
+              ast={get(ast, selected, ast)}
+              path={selected}
               select={select}
-              stepper={debug.eager(
-                toPurescriptAst({
-                  ast: get(ast, selectedForEvaluation, ast),
-                  path
-                })
-              )}
-            />
-            <Debugger
-              label="lazy"
-              select={select}
-              stepper={debug.lazy(
-                toPurescriptAst({
-                  ast: get(ast, selectedForEvaluation, ast),
-                  path
-                })
-              )}
+              evaluationStrategy={evaluationStrategy}
             />
           </div>
         </div>
-      </div>
+      </>
     );
   }
-  private selectForEvaluation = () => {
-    const { selected, selectForEvaluation } = this.props;
-    selectForEvaluation(selected);
-  };
 }
 
 function selectPath({ select, path }: ViewAstProps) {
