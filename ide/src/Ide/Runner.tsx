@@ -12,8 +12,8 @@ interface Props {
   ast: Ast;
   path: string[];
   evaluationStrategy: EvaluationStrategy;
-  select(path: string[]): void;
-  setEvaluationStrategy(evaluationStrategy: EvaluationStrategy): void;
+  select(args: { path: string[] }): void;
+  setEvaluationStrategy(args: { evaluationStrategy: EvaluationStrategy }): void;
 }
 
 interface State {
@@ -32,7 +32,11 @@ export class Runner extends React.PureComponent<Props, State> {
           strategy:
           <select
             value={evaluationStrategy}
-            onChange={e => setEvaluationStrategy(e.target.value as any)}
+            onChange={e =>
+              setEvaluationStrategy({
+                evaluationStrategy: e.target.value as EvaluationStrategy
+              })
+            }
           >
             <option value="eager">eager</option>
             <option value="lazy">lazy</option>
@@ -56,7 +60,7 @@ export class Runner extends React.PureComponent<Props, State> {
                           path={[]}
                           select={select}
                           onSelect={({ select, ast, path }) => {
-                            select((ast as any).source);
+                            select({ path: (ast as any).source });
                             setSelectedResult(path);
                           }}
                           selected={selectedResult}

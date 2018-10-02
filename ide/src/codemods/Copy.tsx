@@ -2,13 +2,15 @@ import { Codemod } from "./Codemod";
 import * as React from "react";
 import { IdeState, boundActions } from "../Ide/stateManagment";
 import { get } from "lodash";
+import { getActiveEditor } from "./common";
 
 class Copy extends React.PureComponent<IdeState & typeof boundActions> {
   public render() {
     return <button onClick={this.copy}>copy</button>;
   }
   private copy = () => {
-    const { ast, clip, selected } = this.props;
+    const { clip } = this.props;
+    const { ast, selected } = getActiveEditor(this.props);
     clip(get(ast, selected, ast));
   };
 }

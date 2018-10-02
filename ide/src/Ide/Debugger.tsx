@@ -11,7 +11,7 @@ interface Props {
   ast: Ast;
   path: string[];
   evaluationStrategy: EvaluationStrategy;
-  select(path: string[]): void;
+  select(args: { path: string[] }): void;
 }
 
 interface State {
@@ -50,7 +50,7 @@ export class Debugger extends React.PureComponent<Props, State> {
                   path={[]}
                   select={select}
                   onSelect={({ select, ast, path }) => {
-                    select((ast as any).source);
+                    select({ path: (ast as any).source });
                     setSelectedResult(path);
                   }}
                   selected={selectedResult}

@@ -3,7 +3,7 @@ import { Ast } from "../Ast/Ast";
 import { get, isEqual } from "lodash";
 import * as React from "react";
 import { IdeState, boundActions } from "../Ide/stateManagment";
-import { insertNode } from "./common";
+import { insertNode, getActiveEditor } from "./common";
 
 class ModifyReference extends React.PureComponent<
   IdeState & typeof boundActions,
@@ -11,7 +11,7 @@ class ModifyReference extends React.PureComponent<
 > {
   public state = { text: "" };
   public render() {
-    const { ast, selected } = this.props;
+    const { ast, selected } = getActiveEditor(this.props);
     const { text } = this.state;
     const node: Ast = get(ast, selected, ast);
     if (node.type === "Reference") {
@@ -42,15 +42,20 @@ class ModifyReference extends React.PureComponent<
     event.preventDefault();
   };
   public componentDidMount() {
-    const { ast, selected } = this.props;
+    const { ast, selected } = getActiveEditor(this.props);
     const node: Ast = get(ast, selected, ast);
     if (node.type === "Reference") {
       this.setState({ text: node.identifier });
     }
   }
   public componentDidUpdate(prevProps: IdeState & typeof boundActions) {
-    if (!isEqual(prevProps.selected, this.props.selected)) {
-      const { ast, selected } = this.props;
+    if (
+      !isEqual(
+        getActiveEditor(prevProps).selected,
+        getActiveEditor(this.props).selected
+      )
+    ) {
+      const { ast, selected } = getActiveEditor(this.props);
       const node: Ast = get(ast, selected, ast);
       if (node.type === "Reference") {
         this.setState({ text: node.identifier });

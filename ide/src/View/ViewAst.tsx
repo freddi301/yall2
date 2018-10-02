@@ -11,7 +11,7 @@ export interface ViewAstProps {
   parentAst: Ast;
   path: string[];
   selected: string[];
-  select(path: string[]): void;
+  select(args: { path: string[] }): void;
   onSelect(props: ViewAstProps): void;
 }
 

@@ -1,18 +1,23 @@
 import { Ast } from "../Ast/Ast";
-import { boundActions, IdeState } from "../Ide/stateManagment";
+import { boundActions, IdeState, Editor } from "../Ide/stateManagment";
 import { set } from "lodash";
 import produce from "immer";
 
 export function insertNode(
-  { selected, ast, replace }: IdeState & typeof boundActions,
+  { activeEditor, editors, replace }: IdeState & typeof boundActions,
   node: Ast
 ) {
+  const { selected, ast } = editors[activeEditor];
   if (selected.length === 0) {
-    replace(node);
+    replace({ ast: node });
   } else {
     const newAst = produce(ast, draftAst => {
       set(draftAst, selected, node);
     });
-    replace(newAst);
+    replace({ ast: newAst });
   }
+}
+
+export function getActiveEditor({ editors, activeEditor }: IdeState): Editor {
+  return editors[activeEditor];
 }

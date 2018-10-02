@@ -3,6 +3,7 @@ import { Ast } from "../Ast/Ast";
 import { get } from "lodash";
 import * as React from "react";
 import { IdeState, boundActions } from "../Ide/stateManagment";
+import { getActiveEditor } from "./common";
 
 class Export extends React.PureComponent<
   IdeState & typeof boundActions,
@@ -17,7 +18,7 @@ class Export extends React.PureComponent<
     );
   }
   private export = () => {
-    const { ast, selected } = this.props;
+    const { ast, selected } = getActiveEditor(this.props);
     const node: Ast = get(ast, selected, ast);
     this.download("snippet.yall.json", JSON.stringify(node));
   };

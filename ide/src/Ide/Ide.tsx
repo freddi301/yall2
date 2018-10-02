@@ -7,19 +7,14 @@ import { Ast } from "../Ast/Ast";
 import { get } from "lodash";
 import { Debugger } from "./Debugger";
 import { Runner } from "./Runner";
+import { getActiveEditor } from "../codemods/common";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 
 export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
   public render() {
-    const {
-      ast,
-      selected,
-      evaluationStrategy,
-      path,
-      setEvaluationStrategy,
-      select
-    } = this.props;
+    const { evaluationStrategy, setEvaluationStrategy, select } = this.props;
+    const { ast, selected, path } = getActiveEditor(this.props);
     return (
       <>
         <div style={{ display: "flex", height: "70%" }}>
@@ -64,7 +59,7 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
 }
 
 function selectPath({ select, path }: ViewAstProps) {
-  select(path);
+  select({ path });
 }
 
 export const IdeConnected = connect(

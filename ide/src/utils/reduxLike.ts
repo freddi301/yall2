@@ -69,14 +69,15 @@ export type BoundActionCreatorsFrom<Handlers extends ActionHandlers<any>> = {
   ) => void
 };
 
-export function createStateManagment<State>() {
-  return <Handlers extends ActionHandlers<State>>(handlers: Handlers) => {
-    return {
-      handlers,
-      actions: actionsOf(handlers),
-      reducer: reducerOf(handlers),
-      dispatch: (null as any) as DispatchOf<State, Handlers>,
-      boundActions: (null as any) as BoundActionCreatorsFrom<Handlers>
-    };
+export function createStateManagment<
+  State,
+  Handlers extends ActionHandlers<State>
+>(handlers: Handlers) {
+  return {
+    handlers,
+    actions: actionsOf(handlers),
+    reducer: reducerOf(handlers),
+    dispatch: (null as any) as DispatchOf<State, Handlers>,
+    boundActions: (null as any) as BoundActionCreatorsFrom<Handlers>
   };
 }
