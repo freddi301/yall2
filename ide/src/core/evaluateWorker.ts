@@ -1,5 +1,7 @@
 import { Ast } from "../Ast/Ast";
-import { evaluate, fromPurescriptAst, toPurescriptAst } from "./purescript";
+import { evaluate } from "./evaluate";
+import { fromPurescriptAst } from "./fromPurescriptAst";
+import { toPurescriptAst } from "./toPurescriptAst";
 
 const ctx: Worker = self as any;
 

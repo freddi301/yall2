@@ -1,6 +1,6 @@
 import * as React from "react";
 import { codemods } from "../codemods";
-import { IdeState, boundActions } from "./reducer";
+import { IdeState, boundActions } from "./stateManagment";
 import * as Fuse from "fuse.js";
 
 const searchCodemods = new Fuse(codemods, {

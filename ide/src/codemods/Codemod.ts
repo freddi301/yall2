@@ -1,4 +1,4 @@
-import { IdeState, boundActions } from "../Ide/reducer";
+import { IdeState, boundActions } from "../Ide/stateManagment";
 
 export interface Codemod {
   id: string;

@@ -1,6 +1,6 @@
 import { Codemod } from "./Codemod";
 import * as React from "react";
-import { IdeState, boundActions } from "../Ide/reducer";
+import { IdeState, boundActions } from "../Ide/stateManagment";
 import { insertNode } from "./common";
 
 class InsertAbstraction extends React.PureComponent<

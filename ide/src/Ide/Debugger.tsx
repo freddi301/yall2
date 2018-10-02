@@ -1,13 +1,11 @@
 import * as React from "react";
 import { Ast } from "../Ast/Ast";
-import { WithState } from "../components/WithState";
 import { ViewAst } from "../View/ViewAst";
-import {
-  EvaluationStrategy,
-  debug,
-  fromPurescriptAst,
-  toPurescriptAst
-} from "../core/purescript";
+import { debug } from "../core/debug";
+import { fromPurescriptAst } from "../core/fromPurescriptAst";
+import { toPurescriptAst } from "../core/toPurescriptAst";
+import { WithState } from "../components/WithState";
+import { EvaluationStrategy } from "../core/evaluate";
 
 interface Props {
   ast: Ast;

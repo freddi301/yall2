@@ -1,5 +1,5 @@
 import { Ast } from "../Ast/Ast";
-import { boundActions, IdeState } from "../Ide/reducer";
+import { boundActions, IdeState } from "../Ide/stateManagment";
 import { set } from "lodash";
 import produce from "immer";
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { ViewAst, ViewAstProps } from "../View/ViewAst";
 import { Commands } from "./Commands";
-import { actions, boundActions, IdeState } from "./reducer";
+import { actions, boundActions, IdeState } from "./stateManagment";
 import { Ast } from "../Ast/Ast";
 import { get } from "lodash";
 import { Debugger } from "./Debugger";

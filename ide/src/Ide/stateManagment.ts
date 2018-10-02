@@ -1,12 +1,11 @@
 import { Ast } from "../Ast/Ast";
-import { EvaluationStrategy } from "../core/purescript";
 import { createStateManagment } from "../utils/reduxLike";
+import { EvaluationStrategy } from "../core/evaluate";
 
 export interface IdeState {
   ast: Ast;
   path: string[];
   selected: string[];
-  selectedForEvaluation: string[];
   evaluationStrategy: EvaluationStrategy;
   clipboard: Ast;
 }
@@ -15,7 +14,6 @@ export const initial: IdeState = {
   ast: { type: "Reference", identifier: "x" },
   path: [],
   selected: [],
-  selectedForEvaluation: [],
   evaluationStrategy: "eager",
   clipboard: { type: "Reference", identifier: "x" }
 };
@@ -24,7 +22,8 @@ export const {
   reducer,
   actions,
   dispatch,
-  boundActions
+  boundActions,
+  handlers
 } = createStateManagment<IdeState>()({
   select(state, path: string[]) {
     return { ...state, selected: path };

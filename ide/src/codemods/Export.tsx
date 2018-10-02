@@ -2,7 +2,7 @@ import { Codemod } from "./Codemod";
 import { Ast } from "../Ast/Ast";
 import { get } from "lodash";
 import * as React from "react";
-import { IdeState, boundActions } from "../Ide/reducer";
+import { IdeState, boundActions } from "../Ide/stateManagment";
 
 class Export extends React.PureComponent<
   IdeState & typeof boundActions,

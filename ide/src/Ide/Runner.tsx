@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Ast } from "../Ast/Ast";
-import { EvaluationStrategy } from "../core/purescript";
 import { evaluate } from "../core/evaluateService";
 import { PromiseComponent } from "../components/PromiseComponent";
 import { WithState } from "../components/WithState";
 import { ViewAst } from "../View/ViewAst";
+import { EvaluationStrategy } from "../core/evaluate";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 

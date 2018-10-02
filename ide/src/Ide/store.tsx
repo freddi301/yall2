@@ -1,5 +1,5 @@
 import { createStore } from "redux";
-import { initial, reducer } from "./reducer";
+import { initial, reducer } from "./stateManagment";
 
 const devTools =
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
