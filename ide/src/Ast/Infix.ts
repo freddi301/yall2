@@ -1,7 +1,8 @@
 import { Ast } from "./Ast";
 
-export interface Application {
-  type: "Application";
+export interface Infix {
+  type: "Infix";
+  operator: Ast;
   left: Ast;
   right: Ast;
 }

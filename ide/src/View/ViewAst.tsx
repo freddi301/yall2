@@ -5,6 +5,7 @@ import { ViewAbstraction } from "./ViewAbstraction";
 import { ViewApplication } from "./ViewApplication";
 import { ViewReference } from "./ViewReference";
 import { Highlight } from "./Highlight";
+import { ViewInfix } from "./ViewInfix";
 
 export interface ViewAstProps {
   ast: Ast;
@@ -77,6 +78,44 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 path={path.concat("body")}
                 select={select}
                 onSelect={onSelect}
+              />
+            }
+          />
+        );
+      case "Infix":
+        return (
+          <ViewInfix
+            infix={ast}
+            select={this.selectCurrent}
+            showParens={true}
+            operator={
+              <ViewAst
+                ast={ast.operator}
+                parentAst={ast}
+                path={path.concat("operator")}
+                select={select}
+                onSelect={onSelect}
+                selected={selected}
+              />
+            }
+            left={
+              <ViewAst
+                ast={ast.left}
+                parentAst={ast}
+                path={path.concat("left")}
+                select={select}
+                onSelect={onSelect}
+                selected={selected}
+              />
+            }
+            right={
+              <ViewAst
+                ast={ast.right}
+                parentAst={ast}
+                path={path.concat("right")}
+                select={select}
+                onSelect={onSelect}
+                selected={selected}
               />
             }
           />
