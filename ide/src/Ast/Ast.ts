@@ -3,4 +3,6 @@ import { Application } from "./Application";
 import { Reference } from "./Reference";
 import { Infix } from "./Infix";
 
-export type Ast = Reference | Application | Abstraction | Infix;
+export type InlineAst = Reference | Application | Abstraction | Infix;
+
+export type Ast = InlineAst;

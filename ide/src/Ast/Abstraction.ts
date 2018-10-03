@@ -1,7 +1,7 @@
-import { Ast } from "./Ast";
+import { InlineAst } from "./Ast";
 
 export interface Abstraction {
   type: "Abstraction";
   head: string;
-  body: Ast;
+  body: InlineAst;
 }

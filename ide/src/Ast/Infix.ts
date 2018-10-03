@@ -1,8 +1,8 @@
-import { Ast } from "./Ast";
+import { InlineAst } from "./Ast";
 
 export interface Infix {
   type: "Infix";
-  operator: Ast;
-  left: Ast;
-  right: Ast;
+  operator: InlineAst;
+  left: InlineAst;
+  right: InlineAst;
 }
