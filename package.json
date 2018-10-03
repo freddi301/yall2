@@ -5,12 +5,12 @@
   "main": "index.js",
   "repository": "https://github.com/freddi301/yall2.git",
   "author": "Frederik Batuna <gobi301@gmail.com>",
-  "license": "MIT",
-  "private": false,
+  "private": true,
   "scripts": {
     "build:language": "cd language && yarn && yarn bower install && yarn pulp build",
     "build:ide": "cd ide && yarn && yarn build",
     "build": "yarn build:language && yarn build:ide",
-    "start": "yarn build && cd ide && yarn start"
+    "start": "yarn build && cd ide && yarn start",
+    "deploy:now": "yarn build && now && now alias && now rm yall --safe --yes"
   }
 }

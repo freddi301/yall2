@@ -1,0 +1,10 @@
+{
+  "name": "yall",
+  "alias": "yall-lang.now.sh",
+  "type": "static",
+  "public": true,
+  "static": {
+    "public": "ide/build"
+  },
+  "files": ["ide/build"]
+}
