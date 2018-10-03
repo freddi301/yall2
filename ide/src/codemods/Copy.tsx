@@ -11,7 +11,7 @@ class Copy extends React.PureComponent<IdeState & typeof boundActions> {
   private copy = () => {
     const { clip } = this.props;
     const { ast, selected } = getActiveEditor(this.props);
-    clip(get(ast, selected, ast));
+    clip({ ast: get(ast, selected, ast) });
   };
 }
 
