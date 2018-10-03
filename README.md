@@ -1,4 +1,4 @@
-# Yall
+# ![yall logo](ide/public/logo.svg) Yall
 
 Yet Another Lambda Language
 
