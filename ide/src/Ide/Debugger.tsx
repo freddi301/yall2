@@ -6,11 +6,12 @@ import { fromPurescriptAst } from "../core/fromPurescriptAst";
 import { toPurescriptAst } from "../core/toPurescriptAst";
 import { IdeState, boundActions } from "./stateManagment";
 import { SOURCE_EDITOR } from "./Ide";
+import { PurescriptAst } from "../language/Yall.Ast";
 
 type Props = IdeState & typeof boundActions;
 
 interface State {
-  stepper?: IterableIterator<Ast>;
+  stepper?: IterableIterator<PurescriptAst<string, string[]>>;
   done: boolean;
 }
 

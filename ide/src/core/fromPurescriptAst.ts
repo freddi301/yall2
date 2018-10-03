@@ -1,9 +1,13 @@
 import { Ast } from "../Ast/Ast";
-import { Abstraction, Application, Reference } from "../language/Yall.Ast";
-import { PurescriptAst } from "./PurescriptAst";
+import {
+  Abstraction,
+  Application,
+  Reference,
+  PurescriptAst
+} from "../language/Yall.Ast";
 
 export function fromPurescriptAst(
-  ast: PurescriptAst
+  ast: PurescriptAst<string, string[]>
 ): Ast & {
   source: string[];
 } {

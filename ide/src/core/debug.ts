@@ -1,9 +1,11 @@
 import { debugEager, debugLazy } from "../language/Yall.External";
 import { Intermediate, End } from "../language/Yall.Pauseable";
-import { PurescriptAst } from "./PurescriptAst";
+import { PurescriptAst } from "../language/Yall.Ast";
 
 function debuggerFactory(debug: (ast: any) => any) {
-  function* stepper(ast: PurescriptAst): IterableIterator<PurescriptAst> {
+  function* stepper(
+    ast: PurescriptAst<string, string[]>
+  ): IterableIterator<PurescriptAst<string, string[]>> {
     let step = debug(ast);
     while (true) {
       if (step instanceof End) {
