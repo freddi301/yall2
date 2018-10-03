@@ -19,6 +19,7 @@ function debuggerFactory(debug: (ast: any) => any) {
   }
   return stepper;
 }
+
 export const debug = {
   eager: debuggerFactory(debugEager),
   lazy: debuggerFactory(debugLazy)

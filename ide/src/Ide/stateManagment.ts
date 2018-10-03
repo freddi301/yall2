@@ -19,7 +19,16 @@ export const initial: IdeState = {
   activeEditor: "main",
   editors: {
     main: {
-      ast: { type: "Reference", identifier: "x" },
+      ast: {
+        type: "Reference",
+        identifier:
+          "here lays source code, use the commands on the right to edit"
+      },
+      path: [],
+      selected: []
+    },
+    debugger: {
+      ast: { type: "Reference", identifier: "placeholder" },
       path: [],
       selected: []
     }
@@ -28,12 +37,22 @@ export const initial: IdeState = {
   clipboard: { type: "Reference", identifier: "x" }
 };
 
+function setActiveEditor(
+  state: IdeState,
+  { activeEditor }: { activeEditor: string }
+): IdeState {
+  if (!state.editors[activeEditor]) {
+    throw new Error(`Editor instance does not exists: ${activeEditor}`);
+  }
+  return { ...state, activeEditor };
+}
+
 function select(
   state: IdeState,
-  { path: selected }: { path: string[] }
+  { path: selected, editor }: { path: string[]; editor?: string }
 ): IdeState {
   return inEditor({
-    editor: state.activeEditor,
+    editor: editor || state.activeEditor,
     state,
     action(editorState) {
       return { ...editorState, selected };
@@ -41,9 +60,12 @@ function select(
   });
 }
 
-function replace(state: IdeState, { ast }: { ast: Ast }): IdeState {
+function replace(
+  state: IdeState,
+  { ast, editor }: { ast: Ast; editor?: string }
+): IdeState {
   return inEditor({
-    editor: state.activeEditor,
+    editor: editor || state.activeEditor,
     state,
     action(editorState) {
       return { ...editorState, ast };
@@ -84,6 +106,7 @@ export const {
   boundActions,
   handlers
 } = createStateManagment({
+  setActiveEditor,
   select,
   replace,
   clip,

@@ -7,14 +7,19 @@ import { Ast } from "../Ast/Ast";
 import { get } from "lodash";
 import { Debugger } from "./Debugger";
 import { Runner } from "./Runner";
-import { getActiveEditor } from "../codemods/common";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
+export const SOURCE_EDITOR = "main";
 
 export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
   public render() {
-    const { evaluationStrategy, setEvaluationStrategy, select } = this.props;
-    const { ast, selected, path } = getActiveEditor(this.props);
+    const {
+      evaluationStrategy,
+      setEvaluationStrategy,
+      select,
+      editors
+    } = this.props;
+    const { ast, selected, path } = editors[SOURCE_EDITOR];
     return (
       <>
         <div style={{ display: "flex", height: "70%" }}>
@@ -45,12 +50,7 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
             />
           </div>
           <div style={{ width: "50%" }}>
-            <Debugger
-              ast={get(ast, selected, ast)}
-              path={selected}
-              select={select}
-              evaluationStrategy={evaluationStrategy}
-            />
+            <Debugger {...this.props} />
           </div>
         </div>
       </>
