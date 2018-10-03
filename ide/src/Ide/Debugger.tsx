@@ -12,6 +12,7 @@ type Props = IdeState & typeof boundActions;
 
 interface State {
   stepper?: IterableIterator<PurescriptAst<string, string[]>>;
+  history: Ast[];
   done: boolean;
 }
 
@@ -19,9 +20,9 @@ const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 const DEBUGGER_EDITOR = "debugger";
 
 export class Debugger extends React.PureComponent<Props, State> {
-  public state: State = { done: true };
+  public state: State = { done: true, history: [] };
   public render() {
-    const { done, stepper } = this.state;
+    const { done, stepper, history } = this.state;
     const {
       select,
       evaluationStrategy,
@@ -42,24 +43,44 @@ export class Debugger extends React.PureComponent<Props, State> {
             step
           </button>
         </div>
+        {history
+          ? history.map((ast, index) => {
+              return (
+                <div key={index}>
+                  <ViewAst
+                    ast={ast}
+                    parentAst={ROOT_AST}
+                    path={[]}
+                    select={select}
+                    onSelect={({ ast, path }) => {
+                      return;
+                    }}
+                    selected={[]}
+                  />
+                </div>
+              );
+            })
+          : null}
         {stepper ? (
-          <ViewAst
-            ast={ast}
-            parentAst={ROOT_AST}
-            path={[]}
-            select={select}
-            onSelect={({ ast, path }) => {
-              const source: string[] | void = (ast as any).source;
-              if (source) {
-                select({ path: source, editor: SOURCE_EDITOR });
-              }
-              select({ path, editor: DEBUGGER_EDITOR });
-              if (activeEditor !== DEBUGGER_EDITOR) {
-                setActiveEditor({ activeEditor: DEBUGGER_EDITOR });
-              }
-            }}
-            selected={selected}
-          />
+          <div key="active">
+            <ViewAst
+              ast={ast}
+              parentAst={ROOT_AST}
+              path={[]}
+              select={select}
+              onSelect={({ ast, path }) => {
+                const source: string[] | void = (ast as any).source;
+                if (source) {
+                  select({ path: source, editor: SOURCE_EDITOR });
+                }
+                select({ path, editor: DEBUGGER_EDITOR });
+                if (activeEditor !== DEBUGGER_EDITOR) {
+                  setActiveEditor({ activeEditor: DEBUGGER_EDITOR });
+                }
+              }}
+              selected={selected}
+            />
+          </div>
         ) : null}
       </div>
     );
@@ -68,7 +89,7 @@ export class Debugger extends React.PureComponent<Props, State> {
     const { evaluationStrategy, editors } = this.props;
     const { ast, path } = editors[SOURCE_EDITOR];
     const stepper = debug[evaluationStrategy](toPurescriptAst({ ast, path }));
-    this.setState({ stepper, done: false }, this.next);
+    this.setState({ stepper, done: false, history: [ast] });
   };
   private next = () => {
     const { replace, editors } = this.props;
@@ -76,12 +97,15 @@ export class Debugger extends React.PureComponent<Props, State> {
     if (stepper) {
       const ast = editors[DEBUGGER_EDITOR].ast;
       const path = (ast as any).source || [];
+      this.setState(({ history }) => ({ history: history.concat(ast) }));
       const { done, value } = stepper.next(toPurescriptAst({ ast, path }));
       if (done) {
         this.setState({ done });
       } else {
         const ast = fromPurescriptAst(value);
-        this.setState({ done: false });
+        if (this.state.done) {
+          this.setState({ done: false });
+        }
         replace({ ast, editor: DEBUGGER_EDITOR });
       }
     }
