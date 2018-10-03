@@ -1,7 +1,9 @@
 import * as React from "react";
-import { codemods } from "../codemods";
+import { codemods as codemodsDictionary } from "../codemods";
 import { IdeState, boundActions } from "./stateManagment";
 import * as Fuse from "fuse.js";
+
+const codemods = Object.values(codemodsDictionary);
 
 const searchCodemods = new Fuse(codemods, {
   shouldSort: true,
@@ -13,7 +15,7 @@ const searchCodemods = new Fuse(codemods, {
   distance: 100,
   maxPatternLength: 32,
   minMatchCharLength: 1,
-  keys: ["id"]
+  keys: ["search"]
 });
 
 export class Commands extends React.PureComponent<
@@ -35,8 +37,8 @@ export class Commands extends React.PureComponent<
           />
         </form>
         <div>
-          {list.map(({ render: Render, id }) => (
-            <div key={id}>
+          {list.map(({ render: Render }) => (
+            <div key={Render.name}>
               <Render {...this.props} />
             </div>
           ))}

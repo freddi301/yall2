@@ -26,6 +26,6 @@ class InsertAbstraction extends React.PureComponent<
 }
 
 export default {
-  id: "insert abstraction",
+  search: "insert abstraction",
   render: InsertAbstraction
 } as Codemod;

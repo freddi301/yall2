@@ -27,6 +27,6 @@ class InsertApplication extends React.PureComponent<
 }
 
 export default {
-  id: "insert application",
+  search: "insert application",
   render: InsertApplication
 } as Codemod;

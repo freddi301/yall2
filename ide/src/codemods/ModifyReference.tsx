@@ -65,6 +65,6 @@ class ModifyReference extends React.PureComponent<
 }
 
 export default {
-  id: "modify reference identifier",
+  search: "modify reference identifier",
   render: ModifyReference
 } as Codemod;

@@ -40,6 +40,6 @@ class Import extends React.PureComponent<IdeState & typeof boundActions> {
 }
 
 export default {
-  id: "import json",
+  search: "import json",
   render: Import
 } as Codemod;

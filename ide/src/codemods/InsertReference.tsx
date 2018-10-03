@@ -18,6 +18,6 @@ class InsertReference extends React.PureComponent<
 }
 
 export default {
-  id: "insert reference",
+  search: "insert reference",
   render: InsertReference
 } as Codemod;

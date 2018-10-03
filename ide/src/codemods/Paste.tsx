@@ -14,6 +14,6 @@ class Paste extends React.PureComponent<IdeState & typeof boundActions> {
 }
 
 export default {
-  id: "paste",
+  search: "paste",
   render: Paste
 } as Codemod;

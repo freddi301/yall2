@@ -9,8 +9,9 @@ import InsertApplication from "./InsertApplication";
 import InsertAbstraction from "./InsertAbstraction";
 import Copy from "./Copy";
 import Paste from "./Paste";
+import InsertInfix from "./InsertInfix";
 
-export const codemods: Codemod[] = [
+export const codemods: Record<string, Codemod> = {
   ModifyReference,
   ModifyAbstraction,
   Export,
@@ -18,11 +19,7 @@ export const codemods: Codemod[] = [
   InsertReference,
   InsertApplication,
   InsertAbstraction,
+  InsertInfix,
   Copy,
   Paste
-];
-
-const duplicates = _.difference(codemods, _.uniqBy(codemods, "id"));
-if (duplicates.length) {
-  throw new Error(`Duplicate codemod ids`);
-}
+};

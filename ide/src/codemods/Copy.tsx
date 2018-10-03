@@ -16,6 +16,6 @@ class Copy extends React.PureComponent<IdeState & typeof boundActions> {
 }
 
 export default {
-  id: "copy",
+  search: "copy",
   render: Copy
 } as Codemod;

@@ -37,6 +37,6 @@ class Export extends React.PureComponent<
 }
 
 export default {
-  id: "export json",
+  search: "export json",
   render: Export
 } as Codemod;
