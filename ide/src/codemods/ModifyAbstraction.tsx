@@ -17,12 +17,14 @@ class ModifyAbstraction extends React.PureComponent<
     if (node.type === "Abstraction") {
       return (
         <form onSubmit={this.changeHead} style={{ display: "flex" }}>
-          identifier:
-          <input
-            value={text}
-            onChange={this.changeText}
-            style={{ flexGrow: 1 }}
-          />
+          <div>identifier:</div>
+          <div style={{ flexGrow: 1 }}>
+            <input
+              value={text}
+              onChange={this.changeText}
+              style={{ width: "100%" }}
+            />
+          </div>
         </form>
       );
     } else {
