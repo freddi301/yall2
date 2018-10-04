@@ -1,6 +1,7 @@
 import { Ast } from "../Ast/Ast";
 import { createStateManagment } from "../utils/reduxLike";
 import { EvaluationStrategy } from "../core/evaluate";
+import * as welcomeAst from "../samples/church-boolean.test.yall.json";
 
 export interface IdeState {
   activeEditor: string;
@@ -19,11 +20,7 @@ export const initial: IdeState = {
   activeEditor: "main",
   editors: {
     main: {
-      ast: {
-        type: "Reference",
-        identifier:
-          "here lays source code, use the commands on the right to edit"
-      },
+      ast: (welcomeAst as any) as Ast,
       path: [],
       selected: []
     },

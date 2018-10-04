@@ -35,7 +35,7 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
               />
             </div>
           </div>
-          <div style={{ width: "20em" }}>
+          <div style={{ width: "30em" }}>
             <Commands {...this.props} />
           </div>
         </div>
