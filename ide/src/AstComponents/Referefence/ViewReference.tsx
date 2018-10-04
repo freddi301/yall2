@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Reference } from "../AstComponents/Referefence/Reference";
+import { Reference } from "./Reference";
 
 export class ViewReference extends React.PureComponent<{
   reference: Reference;

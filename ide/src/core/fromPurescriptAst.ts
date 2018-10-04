@@ -1,4 +1,4 @@
-import { BasicAst } from "../AstComponents/Ast";
+import { BasicAst } from "../AstComponents/Ast/Ast";
 import {
   Abstraction,
   Application,

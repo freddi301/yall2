@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Ast } from "../AstComponents/Ast";
-import { ViewAst } from "../View/ViewAst";
+import { Ast } from "../AstComponents/Ast/Ast";
+import { ViewAst } from "../AstComponents/Ast/ViewAst";
 import { debug } from "../core/debug";
 import { fromPurescriptAst } from "../core/fromPurescriptAst";
 import { toPurescriptAst } from "../core/toPurescriptAst";

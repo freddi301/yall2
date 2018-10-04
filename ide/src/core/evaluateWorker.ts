@@ -1,4 +1,4 @@
-import { Ast } from "../AstComponents/Ast";
+import { Ast } from "../AstComponents/Ast/Ast";
 import { evaluate } from "./evaluate";
 import { fromPurescriptAst } from "./fromPurescriptAst";
 import { toPurescriptAst } from "./toPurescriptAst";

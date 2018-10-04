@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Ast } from "../AstComponents/Ast";
+import { Ast } from "../AstComponents/Ast/Ast";
 import { evaluate } from "../core/evaluate";
 import { PromiseComponent } from "../components/PromiseComponent";
 import { WithState } from "../components/WithState";
-import { ViewAst } from "../View/ViewAst";
+import { ViewAst } from "../AstComponents/Ast/ViewAst";
 import { EvaluationStrategy } from "../core/evaluate";
 import { toPurescriptAst } from "../core/toPurescriptAst";
 import { fromPurescriptAst } from "../core/fromPurescriptAst";

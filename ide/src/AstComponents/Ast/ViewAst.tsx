@@ -1,12 +1,12 @@
 import { isEqual } from "lodash";
 import * as React from "react";
-import { Ast } from "../AstComponents/Ast";
-import { ViewAbstraction } from "./ViewAbstraction";
-import { ViewApplication } from "./ViewApplication";
-import { ViewReference } from "./ViewReference";
+import { Ast } from "./Ast";
+import { ViewAbstraction } from "../Abstraction/ViewAbstraction";
+import { ViewApplication } from "../Application/ViewApplication";
+import { ViewReference } from "../Referefence/ViewReference";
 import { Highlight } from "./Highlight";
-import { ViewInfix } from "./ViewInfix";
-import { ViewWhere } from "./ViewWhere";
+import { ViewInfix } from "../Infix/ViewInfix";
+import { ViewWhere } from "../Where/ViewWhere";
 
 export interface ViewAstProps {
   ast: Ast;

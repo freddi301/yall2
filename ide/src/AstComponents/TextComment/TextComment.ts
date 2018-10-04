@@ -1,4 +1,4 @@
-import { Ast } from "../Ast";
+import { Ast } from "../Ast/Ast";
 
 export interface TextComment {
   type: "TextComment";

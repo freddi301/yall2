@@ -1,5 +1,5 @@
 import Worker from "worker-loader!./evaluateWorker";
-import { Ast } from "../AstComponents/Ast";
+import { Ast } from "../AstComponents/Ast/Ast";
 import { EvaluationStrategy } from "./evaluate";
 
 export function evaluate(args: {

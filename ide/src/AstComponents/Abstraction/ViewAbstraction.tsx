@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Abstraction } from "../AstComponents/Abstraction/Abstraction";
+import { Abstraction } from "./Abstraction";
 
 export class ViewAbstraction extends React.PureComponent<{
   abstraction: Abstraction;
