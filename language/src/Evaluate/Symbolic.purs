@@ -1,10 +1,11 @@
 module Yall.Evaluate.Symbolic where
 
-import Yall.Pauseable (class Pauseable, end, wait, (|>))
-import Yall.Ast (Ast(..))
-import Yall.Reify (reify)
 import Prelude (class Eq, class Ord, flip, not, ($), (&&), (+), (==))
 import Data.Set as Set
+import Yall.Ast (Ast(..))
+import Yall.Ast.Properties (isAstEquivalent)
+import Yall.Reify (reify)
+import Yall.Pauseable (class Pauseable, end, wait, (|>))
 
 bind ∷ ∀ container content . Pauseable container ⇒ container content → (content → container content) → container content
 bind = flip wait
@@ -29,10 +30,12 @@ symbolic nextSymbol ast = result where
     Application left@(Reference _ _) right source → do
       right ← recursive |> right
       end $ Application left right source
-    Application left right source → do
+    before@(Application left right source) → do
       left ← recursive |> left
       right ← recursive |> right
-      recursive |> Application left right source
+      let after = Application left right source
+      if after `isAstEquivalent` before then end before -- infinite recursion guard: due to free variables
+        else recursive |> after
     Abstraction head body source → do
       let liftedHead = case head of Symbol reference _ → Symbol reference nextSymbol
       let liftedBody = reify head (Reference liftedHead source) body
