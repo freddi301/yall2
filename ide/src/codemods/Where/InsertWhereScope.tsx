@@ -3,8 +3,8 @@ import * as React from "react";
 import { IdeState, boundActions } from "../../Ide/stateManagment";
 import { getActiveEditor } from "../common";
 import { get } from "lodash";
-import { WhereScope, Where } from "../../Ast/Where";
-import { Ast } from "../../Ast/Ast";
+import { WhereScope, Where } from "../../AstComponents/Where/Where";
+import { Ast } from "../../AstComponents/Ast";
 import produce from "immer";
 
 class InsertWhereScope extends React.PureComponent<

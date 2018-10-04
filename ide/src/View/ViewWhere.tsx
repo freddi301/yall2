@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Where } from "../Ast/Where";
+import { Where } from "../AstComponents/Where/Where";
 
 export class ViewWhere extends React.PureComponent<{
   where: Where;

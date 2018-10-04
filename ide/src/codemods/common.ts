@@ -1,4 +1,4 @@
-import { Ast } from "../Ast/Ast";
+import { Ast } from "../AstComponents/Ast";
 import { boundActions, IdeState, Editor } from "../Ide/stateManagment";
 import { set } from "lodash";
 import produce from "immer";

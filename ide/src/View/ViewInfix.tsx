@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Infix } from "../Ast/Infix";
+import { Infix } from "../AstComponents/Infix/Infix";
 
 export class ViewInfix extends React.PureComponent<{
   infix: Infix;

@@ -1,4 +1,4 @@
-import { Ast } from "../Ast/Ast";
+import { Ast } from "../AstComponents/Ast";
 import { createStateManagment } from "../utils/reduxLike";
 import { EvaluationStrategy } from "../core/evaluate";
 import * as welcomeAst from "../samples/church-boolean.test.yall.json";

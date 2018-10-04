@@ -1,6 +1,6 @@
 import { isEqual } from "lodash";
 import * as React from "react";
-import { Ast } from "../Ast/Ast";
+import { Ast } from "../AstComponents/Ast";
 import { ViewAbstraction } from "./ViewAbstraction";
 import { ViewApplication } from "./ViewApplication";
 import { ViewReference } from "./ViewReference";

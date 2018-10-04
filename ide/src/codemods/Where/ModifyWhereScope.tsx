@@ -1,10 +1,10 @@
 import { Codemod } from "../Codemod";
-import { Ast } from "../../Ast/Ast";
+import { Ast } from "../../AstComponents/Ast";
 import { get, isEqual } from "lodash";
 import * as React from "react";
 import { IdeState, boundActions } from "../../Ide/stateManagment";
 import { getActiveEditor } from "../common";
-import { WhereScope } from "../../Ast/Where";
+import { WhereScope } from "../../AstComponents/Where/Where";
 import produce from "immer";
 
 class ModifyWhereScope extends React.PureComponent<

@@ -1,4 +1,4 @@
-import { InlineAst } from "./Ast";
+import { InlineAst } from "../Ast";
 
 export interface Infix {
   type: "Infix";

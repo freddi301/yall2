@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Application } from "../Ast/Application";
+import { Application } from "../AstComponents/Application/Application";
 
 export class ViewApplication extends React.PureComponent<{
   application: Application;

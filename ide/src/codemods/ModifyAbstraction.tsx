@@ -1,5 +1,5 @@
 import { Codemod } from "./Codemod";
-import { Ast } from "../Ast/Ast";
+import { Ast } from "../AstComponents/Ast";
 import { get, isEqual } from "lodash";
 import * as React from "react";
 import { IdeState, boundActions } from "../Ide/stateManagment";

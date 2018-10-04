@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Ast } from "../Ast/Ast";
+import { Ast } from "../AstComponents/Ast";
 import { evaluate } from "../core/evaluate";
 import { PromiseComponent } from "../components/PromiseComponent";
 import { WithState } from "../components/WithState";
