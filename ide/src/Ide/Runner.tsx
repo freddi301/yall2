@@ -1,12 +1,10 @@
 import * as React from "react";
 import { Ast } from "../AstComponents/Ast/Ast";
-import { evaluate } from "../core/evaluate";
+import { evaluate } from "../core/evaluateService";
 import { PromiseComponent } from "../components/PromiseComponent";
 import { WithState } from "../components/WithState";
 import { ViewAst } from "../AstComponents/Ast/ViewAst";
 import { EvaluationStrategy } from "../core/evaluate";
-import { toPurescriptAst } from "../core/toPurescriptAst";
-import { fromPurescriptAst } from "../core/fromPurescriptAst";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 
@@ -81,11 +79,7 @@ export class Runner extends React.PureComponent<Props, State> {
   }
   private evaluate = () => {
     const { evaluationStrategy, ast, path } = this.props;
-    const evaluated = Promise.resolve(
-      fromPurescriptAst(
-        evaluate[evaluationStrategy](toPurescriptAst({ ast, path }))
-      )
-    );
+    const evaluated = evaluate({ ast, path, evaluationStrategy });
     this.setState({ evaluated });
   };
 }
