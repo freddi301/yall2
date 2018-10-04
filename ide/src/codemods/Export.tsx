@@ -20,7 +20,10 @@ class Export extends React.PureComponent<
   private export = () => {
     const { ast, selected } = getActiveEditor(this.props);
     const node: Ast = get(ast, selected, ast);
-    this.download("snippet.yall.json", JSON.stringify(node));
+    this.download(
+      `${prompt("file name") || "snippet"}.yall.json`,
+      JSON.stringify(node)
+    );
   };
   private download(filename: string, text: string) {
     const element = document.createElement("a");
