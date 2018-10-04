@@ -14,13 +14,13 @@ eager ∷ ∀ container reference source . Eq reference ⇒ Pauseable container 
   Ast reference source → container (Ast reference source)
 
 eager (Application abs@(Abstraction head body _) app@(Application left right _) _)
-  | left `isAstEquivalent` right = end $ reify head app body
+  | left `isAstEquivalent` right = end $ reify head app body -- infinite recursion guard: due to Y fixed point combinator
 eager (Application (Abstraction head body _) right@(Abstraction _ _ _) _) =
   eager |> reify head right body
 eager before@(Application left right source) = do
   left ← eager |> left
   right ← eager |> right
   let after = Application left right source
-  if after `isAstEquivalent` before then end before
-    else eager |> after -- infinite recursion guard: due to free variables
+  if after `isAstEquivalent` before then end before -- infinite recursion guard: due to free variables
+    else eager |> after
 eager term = end term
