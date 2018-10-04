@@ -1,5 +1,5 @@
 import * as React from "react";
-import { codemods as codemodsDictionary } from "../codemods";
+import { codemods as codemodsDictionary } from "../AstComponents/Ast/codemods";
 import { IdeState, boundActions } from "./stateManagment";
 import * as Fuse from "fuse.js";
 

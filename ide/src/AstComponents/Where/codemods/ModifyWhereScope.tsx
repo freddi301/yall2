@@ -1,11 +1,13 @@
-import { Codemod } from "./Codemod";
-import { Ast } from "../AstComponents/Ast/Ast";
+import { Ast } from "../../Ast/Ast";
 import { get, isEqual } from "lodash";
 import * as React from "react";
-import { IdeState, boundActions } from "../Ide/stateManagment";
-import { insertNode, getActiveEditor } from "./common";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
+import { WhereScope } from "../Where";
+import produce from "immer";
+import { getActiveEditor } from "../../Ast/codemods/common";
+import { Codemod } from "../../Ast/codemods/Codemod";
 
-class ModifyReference extends React.PureComponent<
+class ModifyWhereScope extends React.PureComponent<
   IdeState & typeof boundActions,
   { text: string }
 > {
@@ -13,8 +15,8 @@ class ModifyReference extends React.PureComponent<
   public render() {
     const { ast, selected } = getActiveEditor(this.props);
     const { text } = this.state;
-    const node: Ast = get(ast, selected, ast);
-    if (node.type === "Reference") {
+    const node: Ast | WhereScope = get(ast, selected, ast);
+    if (node.type === "WhereScope") {
       return (
         <form onSubmit={this.changeIdentifier} style={{ display: "flex" }}>
           <div>identifier:</div>
@@ -36,17 +38,20 @@ class ModifyReference extends React.PureComponent<
   };
   private changeIdentifier = (event: React.FormEvent) => {
     if (this.state.text !== null) {
-      insertNode(this.props, {
-        type: "Reference",
-        identifier: this.state.text
+      const { replace } = this.props;
+      const { ast, selected } = getActiveEditor(this.props);
+      const newAst = produce(ast, draftAst => {
+        const node: WhereScope = get(draftAst, selected, draftAst);
+        node.identifier = this.state.text;
       });
+      replace({ ast: newAst });
     }
     event.preventDefault();
   };
   public componentDidMount() {
     const { ast, selected } = getActiveEditor(this.props);
-    const node: Ast = get(ast, selected, ast);
-    if (node.type === "Reference") {
+    const node: Ast | WhereScope = get(ast, selected, ast);
+    if (node.type === "WhereScope") {
       this.setState({ text: node.identifier });
     }
   }
@@ -58,8 +63,8 @@ class ModifyReference extends React.PureComponent<
       )
     ) {
       const { ast, selected } = getActiveEditor(this.props);
-      const node: Ast = get(ast, selected, ast);
-      if (node.type === "Reference") {
+      const node: Ast | WhereScope = get(ast, selected, ast);
+      if (node.type === "WhereScope") {
         this.setState({ text: node.identifier });
       }
     }
@@ -67,6 +72,6 @@ class ModifyReference extends React.PureComponent<
 }
 
 export default {
-  search: "modify reference identifier",
-  render: ModifyReference
+  search: "modify where scope",
+  render: ModifyWhereScope
 } as Codemod;

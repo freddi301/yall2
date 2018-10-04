@@ -1,10 +1,10 @@
-import { Codemod } from "../Codemod";
 import * as React from "react";
-import { IdeState, boundActions } from "../../Ide/stateManagment";
-import { insertNode, getActiveEditor } from "../common";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
 import { get, isEqual } from "lodash";
-import { WhereScope } from "../../AstComponents/Where/Where";
-import { Ast } from "../../AstComponents/Ast/Ast";
+import { WhereScope } from "../Where";
+import { Ast } from "../../Ast/Ast";
+import { Codemod } from "../../Ast/codemods/Codemod";
+import { insertNode, getActiveEditor } from "../../Ast/codemods/common";
 
 class InsertWhere extends React.PureComponent<IdeState & typeof boundActions> {
   public render() {

@@ -1,11 +1,11 @@
-import { Codemod } from "../Codemod";
 import * as React from "react";
-import { IdeState, boundActions } from "../../Ide/stateManagment";
-import { getActiveEditor } from "../common";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
 import { get } from "lodash";
-import { WhereScope, Where } from "../../AstComponents/Where/Where";
-import { Ast } from "../../AstComponents/Ast/Ast";
+import { WhereScope, Where } from "../Where";
+import { Ast } from "../../Ast/Ast";
 import produce from "immer";
+import { getActiveEditor } from "../../Ast/codemods/common";
+import { Codemod } from "../../Ast/codemods/Codemod";
 
 class RemoveWhereScope extends React.PureComponent<
   IdeState & typeof boundActions

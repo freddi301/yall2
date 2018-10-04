@@ -1,7 +1,7 @@
-import { Codemod } from "./Codemod";
 import * as React from "react";
-import { IdeState, boundActions } from "../Ide/stateManagment";
-import { insertNode } from "./common";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
+import { Codemod } from "../../Ast/codemods/Codemod";
+import { insertNode } from "../../Ast/codemods/common";
 
 class InsertAbstraction extends React.PureComponent<
   IdeState & typeof boundActions

@@ -1,22 +1,22 @@
-import { Codemod } from "./Codemod";
-import { Ast } from "../AstComponents/Ast/Ast";
+import { Ast } from "../../Ast/Ast";
 import { get, isEqual } from "lodash";
 import * as React from "react";
-import { IdeState, boundActions } from "../Ide/stateManagment";
-import { insertNode, getActiveEditor } from "./common";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
+import { getActiveEditor, insertNode } from "../../Ast/codemods/common";
+import { Codemod } from "../../Ast/codemods/Codemod";
 
-class ModifyAbstraction extends React.PureComponent<
+class ModifyReference extends React.PureComponent<
   IdeState & typeof boundActions,
   { text: string }
 > {
-  public state: { text: string } = { text: "" };
+  public state = { text: "" };
   public render() {
     const { ast, selected } = getActiveEditor(this.props);
     const { text } = this.state;
     const node: Ast = get(ast, selected, ast);
-    if (node.type === "Abstraction") {
+    if (node.type === "Reference") {
       return (
-        <form onSubmit={this.changeHead} style={{ display: "flex" }}>
+        <form onSubmit={this.changeIdentifier} style={{ display: "flex" }}>
           <div>identifier:</div>
           <div style={{ flexGrow: 1 }}>
             <input
@@ -34,13 +34,11 @@ class ModifyAbstraction extends React.PureComponent<
   private changeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ text: e.target.value });
   };
-  private changeHead = (event: React.FormEvent) => {
-    const { ast, selected } = getActiveEditor(this.props);
+  private changeIdentifier = (event: React.FormEvent) => {
     if (this.state.text !== null) {
       insertNode(this.props, {
-        type: "Abstraction",
-        head: this.state.text,
-        body: get(ast, selected.concat("body"))
+        type: "Reference",
+        identifier: this.state.text
       });
     }
     event.preventDefault();
@@ -48,8 +46,8 @@ class ModifyAbstraction extends React.PureComponent<
   public componentDidMount() {
     const { ast, selected } = getActiveEditor(this.props);
     const node: Ast = get(ast, selected, ast);
-    if (node.type === "Abstraction") {
-      this.setState({ text: node.head });
+    if (node.type === "Reference") {
+      this.setState({ text: node.identifier });
     }
   }
   public componentDidUpdate(prevProps: IdeState & typeof boundActions) {
@@ -61,14 +59,14 @@ class ModifyAbstraction extends React.PureComponent<
     ) {
       const { ast, selected } = getActiveEditor(this.props);
       const node: Ast = get(ast, selected, ast);
-      if (node.type === "Abstraction") {
-        this.setState({ text: node.head });
+      if (node.type === "Reference") {
+        this.setState({ text: node.identifier });
       }
     }
   }
 }
 
 export default {
-  search: "modify abstraction identifier",
-  render: ModifyAbstraction
+  search: "modify reference identifier",
+  render: ModifyReference
 } as Codemod;

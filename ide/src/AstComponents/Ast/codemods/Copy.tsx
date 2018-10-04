@@ -1,6 +1,6 @@
 import { Codemod } from "./Codemod";
 import * as React from "react";
-import { IdeState, boundActions } from "../Ide/stateManagment";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
 import { get } from "lodash";
 import { getActiveEditor } from "./common";
 

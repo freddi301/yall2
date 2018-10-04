@@ -1,4 +1,4 @@
-import { IdeState, boundActions } from "../Ide/stateManagment";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
 
 export interface Codemod {
   search: string;

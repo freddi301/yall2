@@ -1,7 +1,7 @@
 import { Codemod } from "./Codemod";
 import * as React from "react";
-import { IdeState, boundActions } from "../Ide/stateManagment";
 import { insertNode } from "./common";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
 
 class Paste extends React.PureComponent<IdeState & typeof boundActions> {
   public render() {

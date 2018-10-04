@@ -1,7 +1,7 @@
 import { Codemod } from "./Codemod";
-import { Ast } from "../AstComponents/Ast/Ast";
+import { Ast } from "../Ast";
 import * as React from "react";
-import { IdeState, boundActions } from "../Ide/stateManagment";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
 import { insertNode } from "./common";
 
 class Import extends React.PureComponent<IdeState & typeof boundActions> {

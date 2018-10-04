@@ -1,8 +1,8 @@
 import { Codemod } from "./Codemod";
-import { Ast } from "../AstComponents/Ast/Ast";
+import { Ast } from "../Ast";
 import { get } from "lodash";
 import * as React from "react";
-import { IdeState, boundActions } from "../Ide/stateManagment";
+import { IdeState, boundActions } from "../../../Ide/stateManagment";
 import { getActiveEditor } from "./common";
 
 class Export extends React.PureComponent<
