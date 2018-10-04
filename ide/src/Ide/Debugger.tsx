@@ -14,6 +14,7 @@ interface State {
   stepper?: IterableIterator<PurescriptAst<string, string[]>>;
   history: Ast[];
   done: boolean;
+  scrollDiv?: HTMLDivElement;
 }
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
@@ -34,7 +35,7 @@ export class Debugger extends React.PureComponent<Props, State> {
     const readyForDebug = Boolean(debug[evaluationStrategy]);
     const isDebugging = stepper && !done;
     return (
-      <div>
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div>
           <button onClick={this.startDebug} disabled={!readyForDebug}>
             debug
@@ -43,45 +44,54 @@ export class Debugger extends React.PureComponent<Props, State> {
             step
           </button>
         </div>
-        {history
-          ? history.map((ast, index) => {
-              return (
-                <div key={index}>
-                  <ViewAst
-                    ast={ast}
-                    parentAst={ROOT_AST}
-                    path={[]}
-                    select={select}
-                    onSelect={({ ast, path }) => {
-                      return;
-                    }}
-                    selected={[]}
-                  />
-                </div>
-              );
-            })
-          : null}
-        {stepper ? (
-          <div key="active">
-            <ViewAst
-              ast={ast}
-              parentAst={ROOT_AST}
-              path={[]}
-              select={select}
-              onSelect={({ ast, path }) => {
-                const source: string[] | void = (ast as any).source;
-                if (source) {
-                  select({ path: source, editor: SOURCE_EDITOR });
-                }
-                select({ path, editor: DEBUGGER_EDITOR });
-                if (activeEditor !== DEBUGGER_EDITOR) {
-                  setActiveEditor({ activeEditor: DEBUGGER_EDITOR });
+        <div style={{ flexGrow: 1, overflow: "scroll" }}>
+          {history
+            ? history.map((ast, index) => {
+                return (
+                  <div key={index}>
+                    <ViewAst
+                      ast={ast}
+                      parentAst={ROOT_AST}
+                      path={[]}
+                      select={select}
+                      onSelect={({ ast, path }) => {
+                        return;
+                      }}
+                      selected={[]}
+                    />
+                  </div>
+                );
+              })
+            : null}
+          {stepper ? (
+            <div
+              key="active"
+              ref={scrollDiv => {
+                if (scrollDiv) {
+                  this.setState({ scrollDiv });
                 }
               }}
-              selected={selected}
-            />
-          </div>
-        ) : null}
+            >
+              <ViewAst
+                ast={ast}
+                parentAst={ROOT_AST}
+                path={[]}
+                select={select}
+                onSelect={({ ast, path }) => {
+                  const source: string[] | void = (ast as any).source;
+                  if (source) {
+                    select({ path: source, editor: SOURCE_EDITOR });
+                  }
+                  select({ path, editor: DEBUGGER_EDITOR });
+                  if (activeEditor !== DEBUGGER_EDITOR) {
+                    setActiveEditor({ activeEditor: DEBUGGER_EDITOR });
+                  }
+                }}
+                selected={selected}
+              />
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   }
@@ -107,6 +117,11 @@ export class Debugger extends React.PureComponent<Props, State> {
           this.setState({ done: false });
         }
         replace({ ast, editor: DEBUGGER_EDITOR });
+        this.setState(null, () => {
+          if (this.state.scrollDiv) {
+            this.state.scrollDiv.scrollIntoView({ behavior: "smooth" });
+          }
+        });
       }
     }
   };
