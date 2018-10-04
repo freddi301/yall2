@@ -26,7 +26,7 @@ export class Commands extends React.PureComponent<
     const { text } = this.state;
     const list = text ? searchCodemods.search(text) : codemods;
     return (
-      <div>
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <form>
           <input
             type="text"
@@ -36,7 +36,7 @@ export class Commands extends React.PureComponent<
             style={{ width: "100%" }}
           />
         </form>
-        <div>
+        <div style={{ flexGrow: 1, overflow: "auto" }}>
           {list.map(({ render: Render }) => (
             <div key={Render.name}>
               <Render {...this.props} />

@@ -44,7 +44,7 @@ export class Debugger extends React.PureComponent<Props, State> {
             step
           </button>
         </div>
-        <div style={{ flexGrow: 1, overflow: "scroll" }}>
+        <div style={{ flexGrow: 1, overflow: "auto" }}>
           {history
             ? history.map((ast, index) => {
                 return (
