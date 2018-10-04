@@ -30,5 +30,18 @@ export function toPurescriptAst({
           toPurescriptAst({ ast: ast.operator, path: path.concat("operator") })
         )(toPurescriptAst({ ast: ast.left, path: path.concat("left") }))(path)
       )(toPurescriptAst({ ast: ast.right, path: path.concat("right") }))(path);
+    case "Where":
+      return ast.scope
+        .slice()
+        .reverse()
+        .reduce((memo, { identifier, body }, index, { length }) => {
+          const position = length - 1 - index;
+          const bodyAst = toPurescriptAst({
+            ast: body,
+            path: path.concat(["scope", String(position), "body"])
+          });
+          const supplyScope = Abstraction.create(identifier)(memo)(path);
+          return Application.create(supplyScope)(bodyAst)(path);
+        }, toPurescriptAst({ ast: ast.body, path: path.concat("body") }));
   }
 }

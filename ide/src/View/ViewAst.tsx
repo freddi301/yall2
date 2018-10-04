@@ -6,6 +6,7 @@ import { ViewApplication } from "./ViewApplication";
 import { ViewReference } from "./ViewReference";
 import { Highlight } from "./Highlight";
 import { ViewInfix } from "./ViewInfix";
+import { ViewWhere } from "./ViewWhere";
 
 export interface ViewAstProps {
   ast: Ast;
@@ -69,7 +70,9 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
           <ViewAbstraction
             abstraction={ast}
             select={this.selectCurrent}
-            showParens={parentAst.type !== "Abstraction"}
+            showParens={
+              !(parentAst.type === "Abstraction" || parentAst.type === "Where")
+            }
             body={
               <ViewAst
                 parentAst={ast}
@@ -118,6 +121,50 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 selected={selected}
               />
             }
+          />
+        );
+      case "Where":
+        return (
+          <ViewWhere
+            where={ast}
+            select={this.selectCurrent}
+            body={
+              <ViewAst
+                ast={ast.body}
+                parentAst={ast}
+                path={path.concat("body")}
+                select={select}
+                onSelect={onSelect}
+                selected={selected}
+              />
+            }
+            scope={ast.scope.map(({ identifier, body }, index) => {
+              const bodyComponent = (
+                <ViewAst
+                  ast={body}
+                  parentAst={ast}
+                  path={path.concat(["scope", String(index), "body"])}
+                  select={select}
+                  onSelect={onSelect}
+                  selected={selected}
+                />
+              );
+              const isSelected = isEqual(
+                selected,
+                path.concat(["scope", String(index)])
+              );
+              return {
+                identifier,
+                body: isSelected ? (
+                  <Highlight>{bodyComponent}</Highlight>
+                ) : (
+                  bodyComponent
+                ),
+                selectScope() {
+                  select({ path: path.concat(["scope", String(index)]) });
+                }
+              };
+            })}
           />
         );
     }

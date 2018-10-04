@@ -1,7 +1,13 @@
 import { InlineAst } from "./Ast";
 
 export interface Where {
-  type: "Application";
+  type: "Where";
   body: InlineAst;
-  scope: Array<{ identifier: string; body: Where | InlineAst }>;
+  scope: WhereScope[];
+}
+
+export interface WhereScope {
+  type: "WhereScope";
+  identifier: string;
+  body: Where | InlineAst;
 }

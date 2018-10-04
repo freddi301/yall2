@@ -1,4 +1,4 @@
-import { Ast } from "../Ast/Ast";
+import { BasicAst } from "../Ast/Ast";
 import {
   Abstraction,
   Application,
@@ -8,7 +8,7 @@ import {
 
 export function fromPurescriptAst(
   ast: PurescriptAst<string, string[]>
-): Ast & {
+): BasicAst & {
   source: string[];
 } {
   if (ast instanceof Reference) {

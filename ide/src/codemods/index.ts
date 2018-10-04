@@ -1,5 +1,4 @@
 import ModifyReference from "./ModifyReference";
-import { Codemod } from "./Codemod";
 import * as _ from "lodash";
 import ModifyAbstraction from "./ModifyAbstraction";
 import Export from "./Export";
@@ -10,8 +9,9 @@ import InsertAbstraction from "./InsertAbstraction";
 import Copy from "./Copy";
 import Paste from "./Paste";
 import InsertInfix from "./InsertInfix";
+import { Where } from "./Where";
 
-export const codemods: Record<string, Codemod> = {
+export const codemods = {
   ModifyReference,
   ModifyAbstraction,
   Export,
@@ -21,5 +21,6 @@ export const codemods: Record<string, Codemod> = {
   InsertAbstraction,
   InsertInfix,
   Copy,
-  Paste
+  Paste,
+  ...Where
 };

@@ -15,9 +15,9 @@ export class ViewInfix extends React.PureComponent<{
       <div style={{ display: "flex" }}>
         {showParens ? <div onClick={select}>(</div> : null}
         {left}
-        <div onClick={select}>`</div>
+        <div onClick={select}>&nbsp;`</div>
         {operator}
-        <div onClick={select}>`</div>
+        <div onClick={select}>`&nbsp;</div>
         {right}
         {showParens ? <div onClick={select}>)</div> : null}
       </div>

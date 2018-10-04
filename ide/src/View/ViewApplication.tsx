@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Application } from "../Ast/Application";
+
 export class ViewApplication extends React.PureComponent<{
   application: Application;
   left: React.ReactNode;
