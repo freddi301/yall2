@@ -3,10 +3,10 @@ module Yall.Infere where
 import Data.Maybe
 
 import Data.Array as Array
+import Data.Foldable as Foldable
 import Data.Map as Map
 import Data.Ord as Ord
 import Data.Set as Set
-import Data.Foldable as Foldable
 import Prelude (class Eq, class Show, otherwise, show, ($), (+), (<>), (==), (<$>))
 import Yall.Ast (Ast(..))
 import Yall.Ast.Properties as AstProperties
@@ -33,7 +33,7 @@ infere { ast: ast@(Application left right source), nextType, typScope, constrain
   inferredRigth = infere { ast: right, nextType, typScope, constraints, typSource }
   leftBodyType = inferredRigth.nextType
   inferredLeft = infere { ast: left, nextType: inferredRigth.nextType + 1, typScope, constraints: inferredRigth.constraints, typSource: inferredRigth.typSource }
-  newConstraints = inferredLeft.constraints -- addConstraint inferredLeft.typ (IsAbstraction inferredRigth.typ leftBodyType) inferredLeft.constraints
+  newConstraints =  addConstraint inferredLeft.typ (IsAbstraction inferredRigth.typ leftBodyType) inferredLeft.constraints
   newTypSource = Map.insert source leftBodyType inferredLeft.typSource
   result = { typ: leftBodyType, nextType: inferredLeft.nextType, constraints: newConstraints, ast: Application inferredLeft.ast inferredRigth.ast source, typSource: newTypSource }
 
@@ -58,11 +58,12 @@ addConstraint typ constraint constraints =
     Nothing → Map.insert typ (Array.singleton constraint) constraints
     Just cons → Map.insert typ (Array.cons constraint cons) constraints
 
-showType ∷ Constraints → Int → String
-showType constraints typ = match $ Map.lookup typ constraints where
+showType ∷ Constraints → Set.Set Int → Int → String
+showType constraints recursives typ = match $ Map.lookup typ constraints where
   match (Nothing) = show typ
   match (Just [cons]) = showIt cons
   match (Just list) = Array.foldl (\ m i → i <> " # " <> m ) "" (showIt <$> list)
-  showIt (IsAbstraction head body)
-    | head == typ = show head <> "*(" <> show head <> " → " <> showType constraints body <> ")"
-    | otherwise = show typ <> "*(" <> showType constraints head <> " → " <> showType constraints body <> ")"
+  showIt (IsAbstraction head body) = show typ <> "*(" <> headString <> " → " <> bodyString <> ")" where
+    newRecursives = Set.insert head recursives
+    headString = if Set.member typ recursives then show head else showType constraints newRecursives head
+    bodyString = if Set.member typ recursives then show body else showType constraints newRecursives body

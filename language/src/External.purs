@@ -3,6 +3,7 @@ module Yall.External where
 import Prelude (id, (>>>), ($), show)
 import Data.Maybe as Maybe
 import Data.Map as Map
+import Data.Set as Set
 import Yall.Ast (Ast)
 import Yall.Ast.Reference as Reference
 import Yall.Evaluate.Eager as Eager
@@ -34,4 +35,4 @@ getType :: Ast String (Array String) → Array String → String
 getType ast source = typeRepresentation where
   result = Infere.infereWithFreeReferences { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }
   sourceTyp = Maybe.fromMaybe 0 $ Map.lookup source result.typSource
-  typeRepresentation = Infere.showType result.constraints sourceTyp
+  typeRepresentation = Infere.showType result.constraints Set.empty sourceTyp
