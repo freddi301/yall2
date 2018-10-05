@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { ViewAst, ViewAstProps } from "../AstComponents/Ast/ViewAst";
+import { ViewAst } from "../AstComponents/Ast/ViewAst";
 import { Commands } from "./Commands";
 import { actions, boundActions, IdeState } from "./stateManagment";
 import { Ast } from "../AstComponents/Ast/Ast";
@@ -17,7 +17,9 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       evaluationStrategy,
       setEvaluationStrategy,
       select,
-      editors
+      editors,
+      setActiveEditor,
+      activeEditor
     } = this.props;
     const { ast, selected, path } = editors[SOURCE_EDITOR];
     return (
@@ -30,7 +32,12 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
                 parentAst={ROOT_AST}
                 path={path}
                 select={select}
-                onSelect={selectPath}
+                onSelect={({ select, path }) => {
+                  select({ path });
+                  if (activeEditor !== SOURCE_EDITOR) {
+                    setActiveEditor({ activeEditor: SOURCE_EDITOR });
+                  }
+                }}
                 selected={selected}
               />
             </div>
@@ -56,10 +63,6 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       </>
     );
   }
-}
-
-function selectPath({ select, path }: ViewAstProps) {
-  select({ path });
 }
 
 export const IdeConnected = connect(

@@ -12,7 +12,7 @@ export interface ViewAstProps {
   ast: Ast;
   parentAst: Ast;
   path: string[];
-  selected: string[];
+  selected?: string[];
   select(args: { path: string[] }): void;
   onSelect(props: ViewAstProps): void;
 }
@@ -154,12 +154,12 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 path.concat(["scope", String(index)])
               );
               return {
-                identifier,
-                body: isSelected ? (
-                  <Highlight>{bodyComponent}</Highlight>
+                identifier: isSelected ? (
+                  <Highlight>{identifier}</Highlight>
                 ) : (
-                  bodyComponent
+                  identifier
                 ),
+                body: bodyComponent,
                 selectScope() {
                   select({ path: path.concat(["scope", String(index)]) });
                 }

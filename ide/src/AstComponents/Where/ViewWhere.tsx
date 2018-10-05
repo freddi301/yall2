@@ -5,7 +5,7 @@ export class ViewWhere extends React.PureComponent<{
   where: Where;
   body: React.ReactNode;
   scope: Array<{
-    identifier: string;
+    identifier: React.ReactNode;
     body: React.ReactNode;
     selectScope(): void;
   }>;
