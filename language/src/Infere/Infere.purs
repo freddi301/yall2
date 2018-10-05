@@ -7,7 +7,7 @@ import Data.Foldable as Foldable
 import Data.Map as Map
 import Data.Ord as Ord
 import Data.Set as Set
-import Prelude (class Eq, class Show, otherwise, show, ($), (+), (<>), (==), (<$>))
+import Prelude (class Eq, class Show, show, ($), (+), (<>), (<$>))
 import Yall.Ast (Ast(..))
 import Yall.Ast.Properties as AstProperties
 
@@ -63,7 +63,7 @@ showType constraints recursives typ = match $ Map.lookup typ constraints where
   match (Nothing) = show typ
   match (Just [cons]) = showIt cons
   match (Just list) = Array.foldl (\ m i → i <> " # " <> m ) "" (showIt <$> list)
-  showIt (IsAbstraction head body) = show typ <> "*(" <> headString <> " → " <> bodyString <> ")" where
+  showIt (IsAbstraction head body) = "(" <> headString <> ") → " <> bodyString where -- show typ <> "*(" <> headString <> " → " <> bodyString <> ")" where
     newRecursives = Set.insert head recursives
     headString = if Set.member typ recursives then show head else showType constraints newRecursives head
     bodyString = if Set.member typ recursives then show body else showType constraints newRecursives body

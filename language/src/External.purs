@@ -1,6 +1,6 @@
 module Yall.External where
 
-import Prelude (id, (>>>), ($), show)
+import Prelude (id, (>>>), ($))
 import Data.Maybe as Maybe
 import Data.Map as Map
 import Data.Set as Set

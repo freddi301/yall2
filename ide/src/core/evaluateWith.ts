@@ -1,4 +1,4 @@
-import { PurescriptAst } from "../language/Yall.Ast/Ast";
+import { PurescriptAst } from "../language/Yall.Ast";
 import { debug } from "./debug";
 
 export const evaluateWith = {
