@@ -15,20 +15,47 @@ export interface ViewAstProps {
   selected?: string[];
   select(args: { path: string[] }): void;
   onSelect(props: ViewAstProps): void;
+  getType(source: string[]): string;
 }
 
 export class ViewAst extends React.PureComponent<ViewAstProps> {
   public render() {
-    const { path, selected } = this.props;
+    const { path, selected, getType } = this.props;
     const isSelected = isEqual(path, selected);
     if (isSelected) {
-      return <Highlight>{this.renderAst()}</Highlight>;
+      return (
+        <Highlight>
+          <div
+            style={{
+              position: "absolute",
+              fontSize: "0.7em",
+              marginTop: "-2.7em",
+              backgroundColor: "var(--dark-background)",
+              zIndex: 1000,
+              padding: "0.5em",
+              borderRadius: "4px",
+              border: "1px solid var(--lighter-dark)"
+            }}
+          >
+            <span style={{ opacity: 0.5 }}>{getType(path)}</span>
+          </div>
+          {this.renderAst()}
+        </Highlight>
+      );
     } else {
       return this.renderAst();
     }
   }
   public renderAst() {
-    const { ast, select, path, selected, parentAst, onSelect } = this.props;
+    const {
+      ast,
+      select,
+      path,
+      selected,
+      parentAst,
+      onSelect,
+      getType
+    } = this.props;
     switch (ast.type) {
       case "Reference":
         return <ViewReference reference={ast} select={this.selectCurrent} />;
@@ -51,6 +78,7 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 select={select}
                 onSelect={onSelect}
                 selected={selected}
+                getType={getType}
               />
             }
             right={
@@ -61,6 +89,7 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 select={select}
                 onSelect={onSelect}
                 selected={selected}
+                getType={getType}
               />
             }
           />
@@ -81,6 +110,7 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 path={path.concat("body")}
                 select={select}
                 onSelect={onSelect}
+                getType={getType}
               />
             }
           />
@@ -99,6 +129,7 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 select={select}
                 onSelect={onSelect}
                 selected={selected}
+                getType={getType}
               />
             }
             left={
@@ -109,6 +140,7 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 select={select}
                 onSelect={onSelect}
                 selected={selected}
+                getType={getType}
               />
             }
             right={
@@ -119,6 +151,7 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 select={select}
                 onSelect={onSelect}
                 selected={selected}
+                getType={getType}
               />
             }
           />
@@ -136,6 +169,7 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 select={select}
                 onSelect={onSelect}
                 selected={selected}
+                getType={getType}
               />
             }
             scope={ast.scope.map(({ identifier, body }, index) => {
@@ -147,6 +181,7 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                   select={select}
                   onSelect={onSelect}
                   selected={selected}
+                  getType={getType}
                 />
               );
               const isSelected = isEqual(
@@ -162,7 +197,8 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
                 body: bodyComponent,
                 selectScope() {
                   select({ path: path.concat(["scope", String(index)]) });
-                }
+                },
+                type: getType(path.concat(["scope", String(index), "body"]))
               };
             })}
           />

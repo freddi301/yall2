@@ -1,0 +1,65 @@
+module Yall.Infere where
+
+import Data.Maybe
+
+import Data.Array (foldr)
+import Data.Array as Array
+import Data.Map as Map
+import Data.Ord as Ord
+import Prelude (class Eq, class Show, otherwise, show, ($), (+), (<>), (==), (<$>))
+import Yall.Ast (Ast(..))
+
+-- TODO: handle free variables at root
+-- TODO: merge types (no duplicate constraint)
+
+infere ∷ ∀ reference source . Ord.Ord reference ⇒ Ord.Ord source ⇒
+  { ast ∷ Ast reference source, nextType ∷ Int, typScope ∷ Map.Map reference Int, constraints ∷ Constraints, typSource ∷ Map.Map source Int } →
+  { typ ∷ Int, nextType ∷ Int, constraints ∷ Constraints, ast ∷ Ast reference source, typSource ∷ Map.Map source Int }
+
+infere { ast: ast@(Reference name source), nextType, typScope, constraints, typSource } = case Map.lookup name typScope of
+    Just typ → { typ, nextType, constraints, ast, typSource: Map.insert source typ typSource }
+    Nothing → { typ: nextType, nextType: nextType + 1, constraints, ast, typSource: Map.insert source nextType typSource }
+
+infere { ast: ast@(Abstraction head body source), nextType, typScope, constraints, typSource } = result where
+    thisAbsType = nextType 
+    thisAbsHeadType = nextType + 1 
+    inferred = infere { ast: body, nextType: nextType + 2, typScope: Map.insert head thisAbsHeadType typScope, constraints, typSource } 
+    newConstraints = addConstraint thisAbsType (IsAbstraction thisAbsHeadType inferred.typ) inferred.constraints 
+    newTypSource = Map.insert source thisAbsType inferred.typSource 
+    result = { typ: thisAbsType, nextType: inferred.nextType, constraints: newConstraints, ast: Abstraction head inferred.ast source, typSource: newTypSource }
+
+infere { ast: ast@(Application (Abstraction leftHead leftBody _ ) right@(Abstraction _ _ _ ) source), nextType, typScope, constraints, typSource } = result where
+  inferredRight = infere { ast: right, nextType, typScope, constraints, typSource }
+  newTypeScope = Map.insert leftHead inferredRight.typ typScope
+  inferredLeft = infere { ast: leftBody, nextType: inferredRight.nextType, constraints: inferredRight.constraints, typScope: newTypeScope, typSource: inferredRight.typSource }
+  newTypSource = Map.insert source inferredLeft.typ inferredLeft.typSource
+  result = inferredLeft { typSource = newTypSource }
+
+infere { ast: ast@(Application left right source), nextType, typScope, constraints, typSource } = result where
+  inferredRigth = infere { ast: right, nextType, typScope, constraints, typSource }
+  leftBodyType = inferredRigth.nextType
+  inferredLeft = infere { ast: left, nextType: inferredRigth.nextType + 1, typScope, constraints: inferredRigth.constraints, typSource: inferredRigth.typSource }
+  newConstraints = addConstraint inferredLeft.typ (IsAbstraction inferredRigth.typ leftBodyType) inferredLeft.constraints
+  newTypSource = Map.insert source leftBodyType inferredLeft.typSource
+  result = { typ: leftBodyType, nextType: inferredLeft.nextType, constraints: newConstraints, ast: Application inferredLeft.ast inferredRigth.ast source, typSource: newTypSource }
+
+data Constraint = IsAbstraction Int Int
+instance showContraint ∷ Show Constraint where show (IsAbstraction head body) = show head <> " → " <> show body
+derive instance eqConstraint ∷ Eq Constraint
+
+type Constraints = Map.Map Int (Array Constraint)
+
+addConstraint ∷ Int → Constraint → Constraints → Constraints
+addConstraint typ constraint constraints =
+  case Map.lookup typ constraints of
+    Nothing → Map.insert typ (Array.singleton constraint) constraints
+    Just cons → Map.insert typ (Array.cons constraint cons) constraints
+
+showType ∷ Constraints → Int → String
+showType constraints typ = match $ Map.lookup typ constraints where
+  match (Nothing) = show typ
+  match (Just [cons]) = showIt cons
+  match (Just list) = foldr (\ m i → m <> " # " <> i ) "" (showIt <$> list)
+  showIt (IsAbstraction head body)
+    | head == typ = show head <> "*(" <> show head <> " → " <> showType constraints body <> ")"
+    | otherwise = "(" <> showType constraints head <> " → " <> showType constraints body <> ")"

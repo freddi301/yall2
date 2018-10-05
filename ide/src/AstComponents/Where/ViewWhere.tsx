@@ -8,6 +8,7 @@ export class ViewWhere extends React.PureComponent<{
     identifier: React.ReactNode;
     body: React.ReactNode;
     selectScope(): void;
+    type: string;
   }>;
   select(): void;
 }> {
@@ -16,11 +17,16 @@ export class ViewWhere extends React.PureComponent<{
     return (
       <div>
         <div>{body}</div>
-        {scope.map(({ identifier, body, selectScope }, index) => (
-          <div key={`${index}${identifier}`} style={{ display: "flex" }}>
+        {scope.map(({ identifier, body, selectScope, type }, index) => (
+          <div style={{ display: "flex" }}>
             <div onClick={select} style={{ width: "1em" }} />
-            <div onClick={selectScope}>{identifier} =&nbsp;</div>
-            <div>{body}</div>
+            <div>
+              <div style={{ opacity: 0.5, fontSize: "0.7em" }}>{type}</div>
+              <div key={`${index}${identifier}`} style={{ display: "flex" }}>
+                <div onClick={selectScope}>{identifier} =&nbsp;</div>
+                <div>{body}</div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

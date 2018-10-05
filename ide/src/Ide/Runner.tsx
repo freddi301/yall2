@@ -64,6 +64,7 @@ export class Runner extends React.PureComponent<Props, State> {
                             setSelectedResult(path);
                           }}
                           selected={selectedResult}
+                          getType={() => ""}
                         />
                       );
                     }}

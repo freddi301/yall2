@@ -7,6 +7,8 @@ import { Ast } from "../AstComponents/Ast/Ast";
 import { get } from "lodash";
 import { Debugger } from "./Debugger";
 import { Runner } from "./Runner";
+import { infere } from "../core/infere";
+import { toPurescriptAst } from "../core/toPurescriptAst";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 export const SOURCE_EDITOR = "main";
@@ -22,11 +24,16 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
       activeEditor
     } = this.props;
     const { ast, selected, path } = editors[SOURCE_EDITOR];
+    const typeInfo = infere.getType(toPurescriptAst({ ast, path }));
     return (
       <>
         <div style={{ display: "flex", height: "70%" }}>
           <div style={{ flexGrow: 2 }}>
             <div>
+              <br />
+              <div style={{ opacity: 0.5, fontSize: "0.7em" }}>
+                {typeInfo([])}
+              </div>
               <ViewAst
                 ast={ast}
                 parentAst={ROOT_AST}
@@ -39,6 +46,7 @@ export class Ide extends React.PureComponent<IdeState & typeof boundActions> {
                   }
                 }}
                 selected={selected}
+                getType={typeInfo}
               />
             </div>
           </div>

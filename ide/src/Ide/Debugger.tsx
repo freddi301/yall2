@@ -58,6 +58,7 @@ export class Debugger extends React.PureComponent<Props, State> {
                         return;
                       }}
                       selected={[]}
+                      getType={() => ""}
                     />
                   </div>
                 );
@@ -88,6 +89,7 @@ export class Debugger extends React.PureComponent<Props, State> {
                   }
                 }}
                 selected={selected}
+                getType={() => ""}
               />
             </div>
           ) : null}

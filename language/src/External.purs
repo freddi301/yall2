@@ -1,11 +1,14 @@
 module Yall.External where
 
-import Prelude (id, (>>>))
+import Prelude (id, (>>>), ($), show)
+import Data.Maybe as Maybe
+import Data.Map as Map
 import Yall.Ast (Ast)
 import Yall.Ast.Reference as Reference
 import Yall.Evaluate.Eager as Eager
 import Yall.Evaluate.Lazy as Lazy
 import Yall.Evaluate.Symbolic as Symbolic
+import Yall.Infere as Infere
 import Yall.Pauseable (Intermediate)
 import Yall.Pauseable as Pauseable
 
@@ -26,3 +29,9 @@ debugEager = Eager.eager
 
 debugLazy :: Ast String (Array String) → Intermediate (Ast String (Array String))
 debugLazy = Lazy.lazy
+
+getType :: Ast String (Array String) → Array String → String
+getType ast source = typeRepresentation where
+  result = Infere.infere { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }
+  sourceTyp = Maybe.fromMaybe 0 $ Map.lookup source result.typSource
+  typeRepresentation = Infere.showType result.constraints sourceTyp

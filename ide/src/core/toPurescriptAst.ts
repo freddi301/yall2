@@ -40,7 +40,8 @@ export function toPurescriptAst({
             ast: body,
             path: path.concat(["scope", String(position), "body"])
           });
-          const supplyScope = Abstraction.create(identifier)(memo)(path);
+          const scopePath = path.concat(["scope", String(position)]);
+          const supplyScope = Abstraction.create(identifier)(memo)(scopePath);
           return Application.create(supplyScope)(bodyAst)(path);
         }, toPurescriptAst({ ast: ast.body, path: path.concat("body") }));
   }
