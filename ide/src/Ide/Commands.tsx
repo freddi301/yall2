@@ -57,6 +57,7 @@ export class Commands extends React.PureComponent<
     const isCtrlEnter = event.key === "Enter" && event.ctrlKey;
     if (isCtrlEnter && this.searchCommandElement) {
       this.searchCommandElement.focus();
+      this.setState({ text: "" });
     }
   };
   public componentDidMount() {
