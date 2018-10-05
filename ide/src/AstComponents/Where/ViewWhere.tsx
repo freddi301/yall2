@@ -18,11 +18,11 @@ export class ViewWhere extends React.PureComponent<{
       <div>
         <div>{body}</div>
         {scope.map(({ identifier, body, selectScope, type }, index) => (
-          <div style={{ display: "flex" }}>
+          <div key={`${index}${identifier}`} style={{ display: "flex" }}>
             <div onClick={select} style={{ width: "1em" }} />
             <div>
               <div style={{ opacity: 0.5, fontSize: "0.7em" }}>{type}</div>
-              <div key={`${index}${identifier}`} style={{ display: "flex" }}>
+              <div style={{ display: "flex" }}>
                 <div onClick={selectScope}>{identifier} =&nbsp;</div>
                 <div>{body}</div>
               </div>

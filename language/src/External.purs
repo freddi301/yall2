@@ -32,6 +32,6 @@ debugLazy = Lazy.lazy
 
 getType :: Ast String (Array String) → Array String → String
 getType ast source = typeRepresentation where
-  result = Infere.infere { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }
+  result = Infere.infereWithFreeReferences { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }
   sourceTyp = Maybe.fromMaybe 0 $ Map.lookup source result.typSource
   typeRepresentation = Infere.showType result.constraints sourceTyp

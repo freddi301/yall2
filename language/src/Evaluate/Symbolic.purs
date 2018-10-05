@@ -3,9 +3,9 @@ module Yall.Evaluate.Symbolic where
 import Prelude (class Eq, class Ord, flip, not, ($), (&&), (+), (==))
 import Data.Set as Set
 import Yall.Ast (Ast(..))
-import Yall.Ast.Properties (isAstEquivalent)
-import Yall.Reify (reify)
+import Yall.Ast.Properties (collectFreeReferences, isAstEquivalent)
 import Yall.Pauseable (class Pauseable, end, wait, (|>))
+import Yall.Reify (reify)
 
 bind ∷ ∀ container content . Pauseable container ⇒ container content → (content → container content) → container content
 bind = flip wait
@@ -42,10 +42,6 @@ symbolic nextSymbol ast = result where
       computedBody ← symbolic (nextSymbol + 1) |> liftedBody
       end $ Abstraction liftedHead computedBody source
     Reference _ _ → end $ term
-  collectFreeReferences { free, scope, term } = case term of
-    Reference name _ → if Set.member name scope then free else Set.insert name free
-    Application left right _ → Set.union (collectFreeReferences { free, scope, term: left }) (collectFreeReferences { free, scope, term: right })
-    Abstraction head body _  → collectFreeReferences { free, scope: Set.insert head scope, term: body }
   ηConversion (Abstraction head (Application body (Reference ref _) _) _ ) | (head == ref) && (head `notUsedIn` body) = body 
   ηConversion ast = ast
   notUsedIn head body = not (Set.member head $ collectFreeReferences { free: Set.empty, scope: Set.empty, term: body })
