@@ -2,7 +2,6 @@ module Yall.Infere where
 
 import Data.Maybe
 
-import Data.Array (foldr)
 import Data.Array as Array
 import Data.Map as Map
 import Data.Ord as Ord
@@ -28,13 +27,6 @@ infere { ast: ast@(Abstraction head body source), nextType, typScope, constraint
     newTypSource = Map.insert source thisAbsType inferred.typSource 
     result = { typ: thisAbsType, nextType: inferred.nextType, constraints: newConstraints, ast: Abstraction head inferred.ast source, typSource: newTypSource }
 
-infere { ast: ast@(Application (Abstraction leftHead leftBody _ ) right@(Abstraction _ _ _ ) source), nextType, typScope, constraints, typSource } = result where
-  inferredRight = infere { ast: right, nextType, typScope, constraints, typSource }
-  newTypeScope = Map.insert leftHead inferredRight.typ typScope
-  inferredLeft = infere { ast: leftBody, nextType: inferredRight.nextType, constraints: inferredRight.constraints, typScope: newTypeScope, typSource: inferredRight.typSource }
-  newTypSource = Map.insert source inferredLeft.typ inferredLeft.typSource
-  result = inferredLeft { typSource = newTypSource }
-
 infere { ast: ast@(Application left right source), nextType, typScope, constraints, typSource } = result where
   inferredRigth = infere { ast: right, nextType, typScope, constraints, typSource }
   leftBodyType = inferredRigth.nextType
@@ -59,7 +51,7 @@ showType ∷ Constraints → Int → String
 showType constraints typ = match $ Map.lookup typ constraints where
   match (Nothing) = show typ
   match (Just [cons]) = showIt cons
-  match (Just list) = foldr (\ m i → m <> " # " <> i ) "" (showIt <$> list)
+  match (Just list) = Array.foldl (\ m i → i <> " # " <> m ) "" (showIt <$> list)
   showIt (IsAbstraction head body)
     | head == typ = show head <> "*(" <> show head <> " → " <> showType constraints body <> ")"
-    | otherwise = "(" <> showType constraints head <> " → " <> showType constraints body <> ")"
+    | otherwise = show typ <> "*(" <> showType constraints head <> " → " <> showType constraints body <> ")"
