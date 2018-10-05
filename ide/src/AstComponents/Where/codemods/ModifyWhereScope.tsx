@@ -72,6 +72,6 @@ class ModifyWhereScope extends React.PureComponent<
 }
 
 export default {
-  search: "modify where scope",
+  search: "identifier modify where scope",
   render: ModifyWhereScope
 } as Codemod;

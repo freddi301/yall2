@@ -21,6 +21,7 @@ const searchCodemods = new Fuse(codemods, {
 export class Commands extends React.PureComponent<
   IdeState & typeof boundActions
 > {
+  private searchCommandElement?: HTMLInputElement | null;
   public state = { text: "" };
   public render() {
     const { text } = this.state;
@@ -32,8 +33,11 @@ export class Commands extends React.PureComponent<
             type="text"
             value={text}
             onChange={this.onChange}
-            placeholder="search command"
+            placeholder="search command [ctrl+enter]"
             style={{ width: "100%" }}
+            ref={searchCommandElement =>
+              (this.searchCommandElement = searchCommandElement)
+            }
           />
         </form>
         <div style={{ flexGrow: 1, overflow: "auto" }}>
@@ -49,4 +53,16 @@ export class Commands extends React.PureComponent<
   private onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ text: event.target.value });
   };
+  private focusSearch = (event: KeyboardEvent) => {
+    const isCtrlEnter = event.key === "Enter" && event.ctrlKey;
+    if (isCtrlEnter && this.searchCommandElement) {
+      this.searchCommandElement.focus();
+    }
+  };
+  public componentDidMount() {
+    document.body.addEventListener("keypress", this.focusSearch);
+  }
+  public componentWillUnmount() {
+    document.body.removeEventListener("keypress", this.focusSearch);
+  }
 }

@@ -69,6 +69,6 @@ class ModifyAbstraction extends React.PureComponent<
 }
 
 export default {
-  search: "modify abstraction identifier",
+  search: "identifier modify abstraction identifier",
   render: ModifyAbstraction
 } as Codemod;
