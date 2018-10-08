@@ -11,12 +11,18 @@ export const evaluateWith = {
       ast: PurescriptAst<string, string[], string>
     ): PurescriptAst<string, string[], string>;
   }) {
-    const stepper = debug.eager(ast);
-    let step = { done: false, value: ast };
-    while (!step.done) {
-      const next = decorator(step.value);
-      step = stepper.next(next);
+    const stepper = debug.eager(decorator(ast));
+    let lastValue = ast;
+    let cycle = 0;
+    while (cycle++ < 1000) {
+      const next = decorator(lastValue);
+      const { done, value } = stepper.next(next);
+      if (done) {
+        return lastValue;
+      } else {
+        lastValue = value;
+      }
     }
-    return step.value;
+    throw new Error("Execution limitexceeded");
   }
 };
