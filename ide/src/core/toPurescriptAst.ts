@@ -12,7 +12,7 @@ export function toPurescriptAst({
 }: {
   ast: Ast;
   path: string[];
-}): PurescriptAst<string, string[]> {
+}): PurescriptAst<string, string[], string> {
   switch (ast.type) {
     case "Reference":
       return Reference.create(ast.identifier)(path);

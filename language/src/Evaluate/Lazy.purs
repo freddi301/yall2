@@ -10,8 +10,8 @@ bind ∷ ∀ container content . Pauseable container ⇒ container content → (
 bind = flip wait
 
 -- | Lazy evaluation
-lazy ∷ ∀ container reference source . Eq reference ⇒ Pauseable container ⇒
-  Ast reference source → container (Ast reference source)
+lazy ∷ ∀ container reference source provided . Eq reference ⇒ Eq provided ⇒ Pauseable container ⇒
+  Ast reference source provided → container (Ast reference source provided)
 
 lazy (Application (Abstraction head body _) right _) =
   lazy |> reify head right body

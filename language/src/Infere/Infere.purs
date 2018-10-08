@@ -13,9 +13,9 @@ import Yall.Ast.Properties as AstProperties
 
 -- TODO: merge types (no duplicate constraint)
 
-infere ∷ ∀ reference source . Ord.Ord reference ⇒ Ord.Ord source ⇒
-  { ast ∷ Ast reference source, nextType ∷ Int, typScope ∷ Map.Map reference Int, constraints ∷ Constraints, typSource ∷ Map.Map source Int } →
-  { typ ∷ Int, nextType ∷ Int, constraints ∷ Constraints, ast ∷ Ast reference source, typSource ∷ Map.Map source Int }
+infere ∷ ∀ reference source provided . Ord.Ord reference ⇒ Ord.Ord source ⇒
+  { ast ∷ Ast reference source provided, nextType ∷ Int, typScope ∷ Map.Map reference Int, constraints ∷ Constraints, typSource ∷ Map.Map source Int } →
+  { typ ∷ Int, nextType ∷ Int, constraints ∷ Constraints, ast ∷ Ast reference source provided, typSource ∷ Map.Map source Int }
 
 infere { ast: ast@(Reference name source), nextType, typScope, constraints, typSource } = case Map.lookup name typScope of
     Just typ → { typ, nextType, constraints, ast, typSource: Map.insert source typ typSource }
@@ -37,9 +37,12 @@ infere { ast: ast@(Application left right source), nextType, typScope, constrain
   newTypSource = Map.insert source leftBodyType inferredLeft.typSource
   result = { typ: leftBodyType, nextType: inferredLeft.nextType, constraints: newConstraints, ast: Application inferredLeft.ast inferredRigth.ast source, typSource: newTypSource }
 
-infereWithFreeReferences :: ∀ reference source . Ord.Ord reference ⇒ Ord.Ord source ⇒
-  { ast ∷ Ast reference source, nextType ∷ Int, typScope ∷ Map.Map reference Int, constraints ∷ Constraints, typSource ∷ Map.Map source Int } →
-  { typ ∷ Int, nextType ∷ Int, constraints ∷ Constraints, ast ∷ Ast reference source, typSource ∷ Map.Map source Int }
+infere { ast: ast@(Provided value source), nextType, typScope, constraints, typSource } = result where
+  result = { typ: nextType, nextType, constraints, ast, typSource }
+
+infereWithFreeReferences :: ∀ reference source provided . Ord.Ord reference ⇒ Ord.Ord source ⇒
+  { ast ∷ Ast reference source provided, nextType ∷ Int, typScope ∷ Map.Map reference Int, constraints ∷ Constraints, typSource ∷ Map.Map source Int } →
+  { typ ∷ Int, nextType ∷ Int, constraints ∷ Constraints, ast ∷ Ast reference source provided, typSource ∷ Map.Map source Int }
 infereWithFreeReferences { ast, nextType, typScope, constraints, typSource } = result where
   freeReferences = AstProperties.collectFreeReferences { free: Set.empty, scope: Set.empty, term: ast }
   newNextType = nextType + (Set.size freeReferences)

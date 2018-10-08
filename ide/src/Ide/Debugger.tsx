@@ -11,7 +11,7 @@ import { PurescriptAst } from "../language/Yall.Ast";
 type Props = IdeState & typeof boundActions;
 
 interface State {
-  stepper?: IterableIterator<PurescriptAst<string, string[]>>;
+  stepper?: IterableIterator<PurescriptAst<string, string[], string>>;
   history: Ast[];
   done: boolean;
   scrollDiv?: HTMLDivElement;

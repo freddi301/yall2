@@ -7,7 +7,7 @@ import {
 } from "../language/Yall.Ast";
 
 export function fromPurescriptAst(
-  ast: PurescriptAst<string, string[]>
+  ast: PurescriptAst<string, string[], string>
 ): BasicAst & {
   source: string[];
 } {

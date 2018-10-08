@@ -4,8 +4,8 @@ import { PurescriptAst } from "../language/Yall.Ast";
 
 function debuggerFactory(debug: (ast: any) => any) {
   function* stepper(
-    ast: PurescriptAst<string, string[]>
-  ): IterableIterator<PurescriptAst<string, string[]>> {
+    ast: PurescriptAst<string, string[], string>
+  ): IterableIterator<PurescriptAst<string, string[], string>> {
     let step = debug(ast);
     while (true) {
       if (step instanceof End) {

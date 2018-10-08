@@ -6,10 +6,10 @@ export const evaluateWith = {
     ast,
     decorator
   }: {
-    ast: PurescriptAst<string, string[]>;
+    ast: PurescriptAst<string, string[], string>;
     decorator(
-      ast: PurescriptAst<string, string[]>
-    ): PurescriptAst<string, string[]>;
+      ast: PurescriptAst<string, string[], string>
+    ): PurescriptAst<string, string[], string>;
   }) {
     const stepper = debug.eager(ast);
     let step = { done: false, value: ast };

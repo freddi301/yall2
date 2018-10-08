@@ -13,25 +13,25 @@ import Yall.Infere as Infere
 import Yall.Pauseable (Intermediate)
 import Yall.Pauseable as Pauseable
 
-evaluateEager :: Ast String (Array String) → Ast String (Array String)
+evaluateEager :: Ast String (Array String) String → Ast String (Array String) String
 evaluateEager = Eager.eager >>> Pauseable.runIntermediate id
 
-evaluateLazy :: Ast String (Array String) → Ast String (Array String)
+evaluateLazy :: Ast String (Array String) String → Ast String (Array String) String
 evaluateLazy = Lazy.lazy >>> Pauseable.runIntermediate id
 
-evaluateSymbolic :: Ast String (Array String) → Ast String (Array String)
+evaluateSymbolic :: Ast String (Array String) String → Ast String (Array String) String
 evaluateSymbolic = lift >>> symbolic >>> (Pauseable.runIntermediate id) >>> unlift where
   lift = Reference.map (\name → (Symbolic.Symbol name 0))
   symbolic = Symbolic.symbolic 0
   unlift = Reference.map (\ref → case ref of (Symbolic.Symbol name _) → name)
 
-debugEager :: Ast String (Array String) → Intermediate (Ast String (Array String))
+debugEager :: Ast String (Array String) String → Intermediate (Ast String (Array String) String)
 debugEager = Eager.eager
 
-debugLazy :: Ast String (Array String) → Intermediate (Ast String (Array String))
+debugLazy :: Ast String (Array String) String → Intermediate (Ast String (Array String) String)
 debugLazy = Lazy.lazy
 
-getType :: Ast String (Array String) → Array String → String
+getType :: Ast String (Array String) String → Array String → String
 getType ast source = typeRepresentation where
   result = Infere.infereWithFreeReferences { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }
   sourceTyp = Maybe.fromMaybe 0 $ Map.lookup source result.typSource

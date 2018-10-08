@@ -10,8 +10,8 @@ bind ∷ ∀ container content . Pauseable container ⇒ container content → (
 bind = flip wait
 
 -- | Eager evaluation
-eager ∷ ∀ container reference source . Eq reference ⇒ Pauseable container ⇒
-  Ast reference source → container (Ast reference source)
+eager ∷ ∀ container reference source provided . Eq reference ⇒ Eq provided ⇒ Pauseable container ⇒
+  Ast reference source provided → container (Ast reference source provided)
 
 eager (Application abs@(Abstraction head body _) app@(Application left right _) _)
   | left `isAstEquivalent` right = end $ reify head app body -- infinite recursion guard: due to Y fixed point combinator

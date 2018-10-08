@@ -8,15 +8,19 @@ import { PurescriptAst } from "../language/Yall.Ast";
 export type EvaluationStrategy = keyof (typeof evaluate);
 
 export const evaluate = {
-  eager(ast: PurescriptAst<string, string[]>): PurescriptAst<string, string[]> {
+  eager(
+    ast: PurescriptAst<string, string[], string>
+  ): PurescriptAst<string, string[], string> {
     return evaluateEager(ast);
   },
-  lazy(ast: PurescriptAst<string, string[]>): PurescriptAst<string, string[]> {
+  lazy(
+    ast: PurescriptAst<string, string[], string>
+  ): PurescriptAst<string, string[], string> {
     return evaluateLazy(ast);
   },
   symbolic(
-    ast: PurescriptAst<string, string[]>
-  ): PurescriptAst<string, string[]> {
+    ast: PurescriptAst<string, string[], string>
+  ): PurescriptAst<string, string[], string> {
     return evaluateSymbolic(ast);
   }
 };

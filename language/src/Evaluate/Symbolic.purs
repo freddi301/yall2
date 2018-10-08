@@ -11,9 +11,9 @@ bind ∷ ∀ container content . Pauseable container ⇒ container content → (
 bind = flip wait
 
 -- | Symbolic evaluation
-symbolic ∷ ∀ container reference source .
-  Eq reference ⇒ Ord reference ⇒ Pauseable container ⇒
-  Int → Ast (Symbol reference Int) source → container (Ast (Symbol reference Int) source)
+symbolic ∷ ∀ container reference source provided .
+  Eq reference ⇒ Eq provided ⇒ Ord reference ⇒ Pauseable container ⇒
+  Int → Ast (Symbol reference Int) source provided → container (Ast (Symbol reference Int) source provided)
 
 symbolic nextSymbol ast = result where
   term = ηConversion ast
@@ -42,6 +42,7 @@ symbolic nextSymbol ast = result where
       computedBody ← symbolic (nextSymbol + 1) |> liftedBody
       end $ Abstraction liftedHead computedBody source
     Reference _ _ → end $ term
+    Provided _ _ → end $ term
   ηConversion (Abstraction head (Application body (Reference ref _) _) _ ) | (head == ref) && (head `notUsedIn` body) = body 
   ηConversion ast = ast
   notUsedIn head body = not (Set.member head $ collectFreeReferences { free: Set.empty, scope: Set.empty, term: body })
