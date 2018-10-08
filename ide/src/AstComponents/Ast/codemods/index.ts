@@ -9,6 +9,7 @@ import InsertInfix from "../../Infix/codemods/InsertInfix";
 import Copy from "./Copy";
 import Paste from "./Paste";
 import { Where } from "../../Where/codemods";
+import TranspileToJavascript from "./TranspileToJavascript";
 
 export const codemods = {
   ModifyReference,
@@ -21,5 +22,6 @@ export const codemods = {
   InsertInfix,
   Copy,
   Paste,
+  TranspileToJavascript,
   ...Where
 };

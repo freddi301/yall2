@@ -1,10 +1,10 @@
 module Yall.External where
 
-import Prelude (id, (>>>), ($))
-import Data.Maybe as Maybe
 import Data.Map as Map
+import Data.Maybe as Maybe
 import Data.Set as Set
-import Yall.Ast (Ast)
+import Prelude (id, (>>>), ($), (<>))
+import Yall.Ast (Ast(..))
 import Yall.Ast.Reference as Reference
 import Yall.Evaluate.Eager as Eager
 import Yall.Evaluate.Lazy as Lazy
@@ -36,3 +36,9 @@ getType ast source = typeRepresentation where
   result = Infere.infereWithFreeReferences { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }
   sourceTyp = Maybe.fromMaybe 0 $ Map.lookup source result.typSource
   typeRepresentation = Infere.showType result.constraints Set.empty sourceTyp
+
+transpileToJavascript :: Ast String (Array String) String → String
+transpileToJavascript (Reference identifier _) = "_" <> identifier
+transpileToJavascript (Application left right _) = "(" <> (transpileToJavascript left) <> ")" <> "(" <> (transpileToJavascript right) <> ")"
+transpileToJavascript (Abstraction head body _) = "_" <> head <> " => " <> (transpileToJavascript body)
+transpileToJavascript (Provided value _) = "\"" <> value <> "\""
