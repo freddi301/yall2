@@ -7,6 +7,7 @@ import { ViewReference } from "../Referefence/ViewReference";
 import { Highlight } from "./Highlight";
 import { ViewInfix } from "../Infix/ViewInfix";
 import { ViewWhere } from "../Where/ViewWhere";
+import { ViewProvided } from "../Provided/ViewProvided";
 
 export interface ViewAstProps {
   ast: Ast;
@@ -203,6 +204,8 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
             })}
           />
         );
+      case "Provided":
+        return <ViewProvided provided={ast} select={this.selectCurrent} />;
     }
   }
   private selectCurrent = () => this.props.onSelect(this.props);

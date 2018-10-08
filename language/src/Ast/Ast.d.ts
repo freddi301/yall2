@@ -1,7 +1,8 @@
-export type PurescriptAst<Identifier, Source, Provided> =
-  | Reference<Identifier, Source, Provided>
-  | Application<Identifier, Source, Provided>
-  | Abstraction<Identifier, Source, Provided>;
+export type PurescriptAst<Identifier, Source, ProvidedValue> =
+  | Reference<Identifier, Source, ProvidedValue>
+  | Application<Identifier, Source, ProvidedValue>
+  | Abstraction<Identifier, Source, ProvidedValue>
+  | Provided<Identifier, Source, ProvidedValue>;
 
 export class Reference<Identifier, Source, Provided> {
   public value0: Identifier;
@@ -31,4 +32,12 @@ export class Abstraction<Identifier, Source, Provided> {
   ) => <Source, Provided>(
     body: PurescriptAst<Identifier, Source, Provided>
   ) => (source: Source) => Reference<Identifier, Source, Provided>;
+}
+
+export class Provided<Identifier, Source, ProvidedValue> {
+  public value0: ProvidedValue;
+  public value1: Source;
+  public static create: <Identifier, ProvidedValue>(
+    value: ProvidedValue
+  ) => <Source>(source: Source) => Provided<Identifier, Source, ProvidedValue>;
 }

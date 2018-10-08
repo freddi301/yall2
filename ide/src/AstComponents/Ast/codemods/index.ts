@@ -10,6 +10,8 @@ import Copy from "./Copy";
 import Paste from "./Paste";
 import { Where } from "../../Where/codemods";
 import TranspileToJavascript from "./TranspileToJavascript";
+import InsertProvided from "../../Provided/codemods/InsertProvided";
+import ModifyProvided from "../../Provided/codemods/ModifyProvided";
 
 export const codemods = {
   ModifyReference,
@@ -23,5 +25,7 @@ export const codemods = {
   Copy,
   Paste,
   TranspileToJavascript,
-  ...Where
+  ...Where,
+  InsertProvided,
+  ModifyProvided
 };

@@ -3,7 +3,8 @@ import {
   Abstraction,
   Application,
   Reference,
-  PurescriptAst
+  PurescriptAst,
+  Provided
 } from "../language/Yall.Ast";
 
 export function toPurescriptAst({
@@ -44,5 +45,7 @@ export function toPurescriptAst({
           const supplyScope = Abstraction.create(identifier)(memo)(scopePath);
           return Application.create(supplyScope)(bodyAst)(path);
         }, toPurescriptAst({ ast: ast.body, path: path.concat("body") }));
+    case "Provided":
+      return Provided.create(ast.value)(path);
   }
 }

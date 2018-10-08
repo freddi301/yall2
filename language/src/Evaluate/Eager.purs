@@ -17,6 +17,8 @@ eager (Application abs@(Abstraction head body _) app@(Application left right _) 
   | left `isAstEquivalent` right = end $ reify head app body -- infinite recursion guard: due to Y fixed point combinator
 eager (Application (Abstraction head body _) right@(Abstraction _ _ _) _) =
   eager |> reify head right body
+eager (Application (Abstraction head body _) right@(Provided _ _) _) =
+  eager |> reify head right body
 eager before@(Application left right source) = do
   left ← eager |> left
   right ← eager |> right

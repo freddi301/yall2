@@ -3,7 +3,8 @@ import {
   Abstraction,
   Application,
   Reference,
-  PurescriptAst
+  PurescriptAst,
+  Provided
 } from "../language/Yall.Ast";
 
 export function fromPurescriptAst(
@@ -27,7 +28,13 @@ export function fromPurescriptAst(
       body: fromPurescriptAst(ast.value1),
       source: ast.value2
     };
+  } else if (ast instanceof Provided) {
+    return {
+      type: "Provided",
+      value: ast.value0,
+      source: ast.value1
+    };
   } else {
-    throw new Error();
+    throw new Error("Error: converting from purescript ast");
   }
 }
