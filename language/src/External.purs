@@ -33,9 +33,10 @@ debugLazy = Lazy.lazy
 
 getType :: Ast String (Array String) String → Array String → String
 getType ast source = typeRepresentation where
-  result = Infere.infereWithFreeReferences { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }
-  sourceTyp = Maybe.fromMaybe 0 $ Map.lookup source result.typSource
-  typeRepresentation = Infere.showType result.constraints Set.empty sourceTyp
+  inferred = Infere.infereWithFreeReferences { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }
+  unified = Infere.unify inferred
+  sourceTyp = Maybe.fromMaybe 0 $ Map.lookup source unified.typSource
+  typeRepresentation = Infere.showType unified.constraints Set.empty sourceTyp
 
 transpileToJavascript :: Ast String (Array String) String → String
 transpileToJavascript (Reference identifier _) = "_" <> identifier
