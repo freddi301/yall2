@@ -43,6 +43,7 @@ export class Runner extends React.PureComponent<Props, State> {
             <option value="eager">eager</option>
             <option value="lazy">lazy</option>
             <option value="symbolic">symbolic</option>
+            <option value="lazySymbolic">lazy symbolic</option>
           </select>
         </div>
         <div>

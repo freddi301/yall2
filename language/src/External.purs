@@ -9,6 +9,7 @@ import Yall.Ast.Reference as Reference
 import Yall.Evaluate.Eager as Eager
 import Yall.Evaluate.Lazy as Lazy
 import Yall.Evaluate.Symbolic as Symbolic
+import Yall.Evaluate.LazySymbolic as LazySymbolic
 import Yall.Infere as Infere
 import Yall.Pauseable (Intermediate)
 import Yall.Pauseable as Pauseable
@@ -24,6 +25,12 @@ evaluateSymbolic = lift >>> symbolic >>> (Pauseable.runIntermediate id) >>> unli
   lift = Reference.map (\name → (Symbolic.Symbol name 0))
   symbolic = Symbolic.symbolic 0
   unlift = Reference.map (\ref → case ref of (Symbolic.Symbol name _) → name)
+
+evaluateLazySymbolic :: Ast String (Array String) String → Ast String (Array String) String
+evaluateLazySymbolic = lift >>> lazySymbolic >>> (Pauseable.runIntermediate id) >>> unlift where
+  lift = Reference.map (\name → (LazySymbolic.Symbol name 0))
+  lazySymbolic = LazySymbolic.lazySymbolic 0
+  unlift = Reference.map (\ref → case ref of (LazySymbolic.Symbol name _) → name)
 
 debugEager :: Ast String (Array String) String → Intermediate (Ast String (Array String) String)
 debugEager = Eager.eager

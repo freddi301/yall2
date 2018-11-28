@@ -1,7 +1,8 @@
 import {
   // evaluateEager,
   evaluateLazy,
-  evaluateSymbolic
+  evaluateSymbolic,
+  evaluateLazySymbolic
 } from "../language/Yall.External";
 import { PurescriptAst, Provided } from "../language/Yall.Ast";
 import { evaluateWith } from "./evaluateWith";
@@ -47,5 +48,10 @@ export const evaluate = {
     ast: PurescriptAst<string, string[], string>
   ): PurescriptAst<string, string[], string> {
     return evaluateSymbolic(ast);
+  },
+  lazySymbolic(
+    ast: PurescriptAst<string, string[], string>
+  ): PurescriptAst<string, string[], string> {
+    return evaluateLazySymbolic(ast);
   }
 };
