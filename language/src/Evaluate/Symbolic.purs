@@ -6,6 +6,7 @@ import Yall.Ast (Ast(..))
 import Yall.Ast.Properties (collectFreeReferences, isAstEquivalent)
 import Yall.Pauseable (class Pauseable, end, wait, (|>))
 import Yall.Reify (reify)
+import Yall.Evaluate.Symbol (Symbol(..))
 
 bind ∷ ∀ container content . Pauseable container ⇒ container content → (content → container content) → container content
 bind = flip wait
@@ -46,7 +47,3 @@ symbolic nextSymbol ast = result where
   ηConversion (Abstraction head (Application body (Reference ref _) _) _ ) | (head == ref) && (head `notUsedIn` body) = body 
   ηConversion ast = ast
   notUsedIn head body = not (Set.member head $ collectFreeReferences { free: Set.empty, scope: Set.empty, term: body })
-
-data Symbol reference variation = Symbol reference variation
-derive instance eqSymbol ∷ (Eq reference, Eq variation) ⇒ Eq (Symbol reference variation)
-derive instance ordSymbol ∷ (Ord reference, Ord variation) ⇒ Ord (Symbol reference variation)

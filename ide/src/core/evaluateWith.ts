@@ -1,15 +1,16 @@
 import { PurescriptAst } from "../language/Yall.Ast";
 import { debug } from "./debug";
+import { PurescriptSymbol } from "src/language/Yall.Evaluate.Symbol";
 
 export const evaluateWith = {
   eager({
     ast,
     decorator
   }: {
-    ast: PurescriptAst<string, string[], string>;
+    ast: PurescriptAst<PurescriptSymbol<string, number>, string[], string>;
     decorator(
-      ast: PurescriptAst<string, string[], string>
-    ): PurescriptAst<string, string[], string>;
+      ast: PurescriptAst<PurescriptSymbol<string, number>, string[], string>
+    ): PurescriptAst<PurescriptSymbol<string, number>, string[], string>;
   }) {
     const stepper = debug.eager(decorator(ast));
     let lastValue = ast;

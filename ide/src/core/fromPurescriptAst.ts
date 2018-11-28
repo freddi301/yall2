@@ -6,14 +6,19 @@ import {
   PurescriptAst,
   Provided
 } from "../language/Yall.Ast";
+import { PurescriptSymbol } from "src/language/Yall.Evaluate.Symbol";
 
 export function fromPurescriptAst(
-  ast: PurescriptAst<string, string[], string>
+  ast: PurescriptAst<PurescriptSymbol<string, number>, string[], string>
 ): BasicAst & {
   source: string[];
 } {
   if (ast instanceof Reference) {
-    return { type: "Reference", identifier: ast.value0, source: ast.value1 };
+    return {
+      type: "Reference",
+      identifier: ast.value0.value0,
+      source: ast.value1
+    };
   } else if (ast instanceof Application) {
     return {
       type: "Application",
@@ -24,7 +29,7 @@ export function fromPurescriptAst(
   } else if (ast instanceof Abstraction) {
     return {
       type: "Abstraction",
-      head: ast.value0,
+      head: ast.value0.value0,
       body: fromPurescriptAst(ast.value1),
       source: ast.value2
     };

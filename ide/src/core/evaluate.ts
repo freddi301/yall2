@@ -7,23 +7,28 @@ import {
 import { PurescriptAst, Provided } from "../language/Yall.Ast";
 import { evaluateWith } from "./evaluateWith";
 import { fromPurescriptAst } from "./fromPurescriptAst";
+import { PurescriptSymbol } from "src/language/Yall.Evaluate.Symbol";
 
 export type EvaluationStrategy = keyof (typeof evaluate);
 
 export const evaluate = {
   // eager(
-  //   ast: PurescriptAst<string, string[], string>
-  // ): PurescriptAst<string, string[], string> {
+  //   ast: PurescriptAst<PurescriptSymbol<string, number>, string[], string>
+  // ): PurescriptAst<PurescriptSymbol<string, number>, string[], string> {
   //   return evaluateEager(ast);
   // },
   eager(
-    ast: PurescriptAst<string, string[], string>
-  ): PurescriptAst<string, string[], string> {
+    ast: PurescriptAst<PurescriptSymbol<string, number>, string[], string>
+  ): PurescriptAst<PurescriptSymbol<string, number>, string[], string> {
     return evaluateWith.eager({
       ast,
       decorator(
-        purescriptAst: PurescriptAst<string, string[], string>
-      ): PurescriptAst<string, string[], string> {
+        purescriptAst: PurescriptAst<
+          PurescriptSymbol<string, number>,
+          string[],
+          string
+        >
+      ): PurescriptAst<PurescriptSymbol<string, number>, string[], string> {
         const node = fromPurescriptAst(purescriptAst);
         if (
           node.type === "Application" &&
@@ -40,18 +45,18 @@ export const evaluate = {
     });
   },
   lazy(
-    ast: PurescriptAst<string, string[], string>
-  ): PurescriptAst<string, string[], string> {
+    ast: PurescriptAst<PurescriptSymbol<string, number>, string[], string>
+  ): PurescriptAst<PurescriptSymbol<string, number>, string[], string> {
     return evaluateLazy(ast);
   },
   symbolic(
-    ast: PurescriptAst<string, string[], string>
-  ): PurescriptAst<string, string[], string> {
+    ast: PurescriptAst<PurescriptSymbol<string, number>, string[], string>
+  ): PurescriptAst<PurescriptSymbol<string, number>, string[], string> {
     return evaluateSymbolic(ast);
   },
   lazySymbolic(
-    ast: PurescriptAst<string, string[], string>
-  ): PurescriptAst<string, string[], string> {
+    ast: PurescriptAst<PurescriptSymbol<string, number>, string[], string>
+  ): PurescriptAst<PurescriptSymbol<string, number>, string[], string> {
     return evaluateLazySymbolic(ast);
   }
 };

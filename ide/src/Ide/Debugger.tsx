@@ -7,11 +7,14 @@ import { toPurescriptAst } from "../core/toPurescriptAst";
 import { IdeState, boundActions } from "./stateManagment";
 import { SOURCE_EDITOR } from "./Ide";
 import { PurescriptAst } from "../language/Yall.Ast";
+import { PurescriptSymbol } from "src/language/Yall.Evaluate.Symbol";
 
 type Props = IdeState & typeof boundActions;
 
 interface State {
-  stepper?: IterableIterator<PurescriptAst<string, string[], string>>;
+  stepper?: IterableIterator<
+    PurescriptAst<PurescriptSymbol<string, number>, string[], string>
+  >;
   history: Ast[];
   done: boolean;
   scrollDiv?: HTMLDivElement;
@@ -48,7 +51,8 @@ export class Debugger extends React.PureComponent<Props, State> {
           {history
             ? history.map((ast, index) => {
                 return (
-                  <div key={index}>
+                  <div key={index} style={{ display: "flex" }}>
+                    <div>{index}:&nbsp;</div>
                     <ViewAst
                       ast={ast}
                       parentAst={ROOT_AST}
@@ -57,7 +61,6 @@ export class Debugger extends React.PureComponent<Props, State> {
                       onSelect={({ ast, path }) => {
                         return;
                       }}
-                      selected={[]}
                       getType={() => ""}
                     />
                   </div>

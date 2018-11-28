@@ -9,6 +9,8 @@ import { ViewInfix } from "../Infix/ViewInfix";
 import { ViewWhere } from "../Where/ViewWhere";
 import { ViewProvided } from "../Provided/ViewProvided";
 
+// TODO: render Symbol Indetifier
+
 export interface ViewAstProps {
   ast: Ast;
   parentAst: Ast;
@@ -23,23 +25,26 @@ export class ViewAst extends React.PureComponent<ViewAstProps> {
   public render() {
     const { path, selected, getType } = this.props;
     const isSelected = isEqual(path, selected);
+    const typeString = getType(path);
     if (isSelected) {
       return (
         <Highlight>
-          <div
-            style={{
-              position: "absolute",
-              fontSize: "0.7em",
-              marginTop: "-2.7em",
-              backgroundColor: "var(--dark-background)",
-              zIndex: 1000,
-              padding: "0.5em",
-              borderRadius: "4px",
-              border: "1px solid var(--lighter-dark)"
-            }}
-          >
-            <span style={{ opacity: 0.5 }}>{getType(path)}</span>
-          </div>
+          {typeString ? (
+            <div
+              style={{
+                position: "absolute",
+                fontSize: "0.7em",
+                marginTop: "-2.7em",
+                backgroundColor: "var(--dark-background)",
+                zIndex: 1000,
+                padding: "0.5em",
+                borderRadius: "4px",
+                border: "1px solid var(--lighter-dark)"
+              }}
+            >
+              <span style={{ opacity: 0.5 }}>{typeString}</span>
+            </div>
+          ) : null}
           {this.renderAst()}
         </Highlight>
       );

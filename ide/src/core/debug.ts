@@ -1,11 +1,19 @@
-import { debugEager, debugLazy } from "../language/Yall.External";
+import {
+  debugEager,
+  debugLazy,
+  debugSymbolic,
+  debugLazySymbolic
+} from "../language/Yall.External";
 import { Intermediate, End } from "../language/Yall.Pauseable";
 import { PurescriptAst } from "../language/Yall.Ast";
+import { PurescriptSymbol } from "src/language/Yall.Evaluate.Symbol";
 
 function debuggerFactory(debug: (ast: any) => any) {
   function* stepper(
-    ast: PurescriptAst<string, string[], string>
-  ): IterableIterator<PurescriptAst<string, string[], string>> {
+    ast: PurescriptAst<PurescriptSymbol<string, number>, string[], string>
+  ): IterableIterator<
+    PurescriptAst<PurescriptSymbol<string, number>, string[], string>
+  > {
     let step = debug(ast);
     while (true) {
       if (step instanceof End) {
@@ -24,5 +32,7 @@ function debuggerFactory(debug: (ast: any) => any) {
 
 export const debug = {
   eager: debuggerFactory(debugEager),
-  lazy: debuggerFactory(debugLazy)
+  lazy: debuggerFactory(debugLazy),
+  symbolic: debuggerFactory(debugSymbolic),
+  lazySymbolic: debuggerFactory(debugLazySymbolic)
 };
