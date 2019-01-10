@@ -42,9 +42,8 @@ type Serializable = any;
 class LocalInMemoryStore implements Store<string, BasicAst> {
   private data = {} as Record<
     string,
-    { value: BasicAst; dependencies: string[] }
+    { value: BasicAst; dependencies: string[]; referenceCount: number }
   >;
-  private referenceCount = {} as Record<string, number>;
   private nextKey = 0;
   public async read(key: string) {
     const entry = this.data[key];
@@ -55,18 +54,16 @@ class LocalInMemoryStore implements Store<string, BasicAst> {
   }
   public async save(value: BasicAst, dependencies: string[]) {
     const key = String(this.nextKey++);
-    this.data[key] = { value, dependencies };
-    this.referenceCount[key] = 1;
+    this.data[key] = { value, dependencies, referenceCount: 1 };
     return key;
   }
   public async incrementReferenceCount(key: string) {
-    this.referenceCount[key]++;
+    this.data[key].referenceCount++;
   }
   public async decrementReferenceCount(key: string) {
-    this.referenceCount[key]--;
-    if (this.referenceCount[key] <= 0) {
+    this.data[key].referenceCount--;
+    if (this.data[key].referenceCount <= 0) {
       delete this.data[key];
-      // delete this.referenceCount[key]
     }
   }
 }
@@ -110,22 +107,31 @@ class LocalSingleThreadedCluster<Key extends Serializable>
     const result = await this.execute(termKey);
     switch (result.type) {
       case "result": {
-        this.store.decrementReferenceCount(termKey);
+        await this.store.decrementReferenceCount(termKey);
         return result.term;
       }
       case "fork": {
-        const parentTask = this.run(result.parent).then(k =>
-          this.store.read(k)
-        );
-        const childTask = this.run(result.child).then(k => this.store.read(k));
-        const [parent, child] = await Promise.all([parentTask, childTask]);
+        const parentTask = this.run(result.parent).then(async k => ({
+          parentKey: k,
+          parent: await this.store.read(k)
+        }));
+        const childTask = this.run(result.child).then(async k => ({
+          childKey: k,
+          child: await this.store.read(k)
+        }));
+        const [{ parentKey, parent }, { childKey, child }] = await Promise.all([
+          parentTask,
+          childTask
+        ]);
         const continuation = replace(this.makePlaceholder(result.child))(
           toPurescriptAst({ ast: child.value, path: [] })
         )(toPurescriptAst({ ast: parent.value, path: [] }));
         const continuationPointer = await this.store.save(
           fromPurescriptAst(continuation),
-          [("dunno" as any) as Key]
+          [...parent.dependencies, ...child.dependencies]
         );
+        await this.store.decrementReferenceCount(parentKey);
+        await this.store.decrementReferenceCount(childKey);
         return this.run(continuationPointer);
       }
     }
