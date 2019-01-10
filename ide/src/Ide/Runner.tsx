@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Ast } from "../AstComponents/Ast/Ast";
+import { Ast, BasicAst } from "../AstComponents/Ast/Ast";
 // import { evaluate } from "../core/evaluateService";
 import { PromiseComponent } from "../components/PromiseComponent";
 import { WithState } from "../components/WithState";
@@ -7,6 +7,7 @@ import { ViewAst } from "../AstComponents/Ast/ViewAst";
 import { EvaluationStrategy, evaluate } from "../core/evaluate";
 import { fromPurescriptAst } from "../core/fromPurescriptAst";
 import { toPurescriptAst } from "../core/toPurescriptAst";
+import { distributedExecutionDemo } from "src/core/distributedExecution";
 
 const ROOT_AST: Ast = { type: "Reference", identifier: "root" };
 
@@ -45,6 +46,9 @@ export class Runner extends React.PureComponent<Props, State> {
             <option value="symbolic">symbolic</option>
             <option value="lazySymbolic">lazy symbolic</option>
           </select>
+          <button onClick={this.distributedExecution}>
+            distributed evaluate
+          </button>
         </div>
         <div>
           {evaluated ? (
@@ -89,6 +93,14 @@ export class Runner extends React.PureComponent<Props, State> {
         evaluate[evaluationStrategy](toPurescriptAst({ ast, path }))
       )
     );
+    this.setState({ evaluated });
+  };
+  private distributedExecution = async () => {
+    const { ast, path } = this.props;
+    const basicAst: BasicAst = fromPurescriptAst(
+      toPurescriptAst({ ast, path })
+    );
+    const evaluated = distributedExecutionDemo.run(basicAst);
     this.setState({ evaluated });
   };
 }

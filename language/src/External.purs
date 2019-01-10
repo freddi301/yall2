@@ -8,12 +8,13 @@ import Yall.Ast (Ast(..))
 import Yall.Ast.Reference as Reference
 import Yall.Evaluate.Eager as Eager
 import Yall.Evaluate.Lazy as Lazy
-import Yall.Evaluate.Symbolic as Symbolic
 import Yall.Evaluate.LazySymbolic as LazySymbolic
 import Yall.Evaluate.Symbol as Symbol
+import Yall.Evaluate.Symbolic as Symbolic
 import Yall.Infere as Infere
 import Yall.Pauseable (Intermediate)
 import Yall.Pauseable as Pauseable
+import Yall.Reify as Reify
 
 type Identifier = (Symbol.Symbol String Int)
 
@@ -58,6 +59,9 @@ getResult = Pauseable.getResult
 
 nextWith ∷ ∀ result . result → Intermediate result → Intermediate result
 nextWith = Pauseable.nextWith
+
+reify ∷ Identifier → (Ast Identifier (Array String) String) → (Ast Identifier (Array String) String) → (Ast Identifier (Array String) String)
+reify = Reify.reify
 
 getType :: Ast Identifier (Array String) String → Array String → String
 getType ast source = typeRepresentation where

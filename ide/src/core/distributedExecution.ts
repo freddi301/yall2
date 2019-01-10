@@ -6,28 +6,29 @@ import {
   getResult,
   nextWith,
   nextNoRecur
+  // reify
 } from "../language/Yall.External";
 import { End } from "../language/Yall.Pauseable";
 import { fromPurescriptAst } from "./fromPurescriptAst";
 
 // key value distributed store (eventual consistency)
 interface Store<Key extends Serializable, Value extends Serializable> {
-  read(key: Key): Promise<Value>;
-  save(value: Value): Promise<Key>;
+  read(key: Key): Promise<{ value: Value; dependencies: Key[] }>;
+  save(value: Value, dependencies: Key[]): Promise<Key>;
 }
 
 type Result<Key extends Serializable> =
+  | { type: "result"; term: Key }
   | {
       type: "fork";
-      term: Key;
-      uses: Key;
-    }
-  | { type: "result"; term: Key };
+      parent: Key;
+      child: Key;
+    };
 
 // serverless cloud
 interface Cluster<Key extends Serializable> {
-  execute(termKey: Key): Promise<Result<Key>>;
-  run(termKey: Key): Promise<Key>;
+  execute(termPointer: Key): Promise<Result<Key>>;
+  run(termPointer: Key): Promise<Key>;
 }
 
 interface Client {
@@ -37,26 +38,21 @@ interface Client {
 type Serializable = any;
 
 class LocalInMemoryStore implements Store<string, BasicAst> {
-  private data = {} as Record<string, BasicAst>;
+  private data = {} as Record<
+    string,
+    { value: BasicAst; dependencies: string[] }
+  >;
   private nextKey = 0;
   public async read(key: string) {
-    const value = this.data[key];
-    if (value) {
-      return value;
+    const entry = this.data[key];
+    if (entry) {
+      return entry;
     }
     throw new Error("not found");
   }
-  public async extract(key: string) {
-    const value = this.data[key];
-    if (value) {
-      delete this.data[key];
-      return value;
-    }
-    throw new Error("not found");
-  }
-  public async save(value: BasicAst) {
+  public async save(value: BasicAst, dependencies: string[]) {
     const key = String(this.nextKey++);
-    this.data[key] = value;
+    this.data[key] = { value, dependencies };
     return key;
   }
 }
@@ -66,29 +62,35 @@ class LocalSingleThreadedCluster<Key extends Serializable>
   constructor(private store: Store<Key, BasicAst>) {}
   public async execute(termKey: Key): Promise<Result<Key>> {
     const term = await this.store.read(termKey);
-    let step = debugLazySymbolic(toPurescriptAst({ ast: term, path: [] }));
-    let computationQuotaReached = 0;
-    while (!computationQuotaReached-- && !(step instanceof End)) {
+    let step = debugLazySymbolic(
+      toPurescriptAst({ ast: term.value, path: [] })
+    );
+    let computationQuota = 19;
+    while (computationQuota-- && !(step instanceof End)) {
       step = next(step);
     }
     if (step instanceof End) {
-      const resultUri = await this.store.save(fromPurescriptAst(step));
+      const resultUri = await this.store.save(
+        fromPurescriptAst(getResult(step)),
+        term.dependencies
+      );
       return { type: "result", term: resultUri };
     }
     const intermediate = getResult(step);
     const intermediateUri = await this.store.save(
-      fromPurescriptAst(intermediate)
+      fromPurescriptAst(intermediate),
+      term.dependencies
     );
-    const placeholder = toPurescriptAst({
-      ast: { type: "Provided", value: (intermediateUri as any) as string },
-      path: []
-    });
+    const placeholder = this.makePlaceholder(intermediateUri);
     step = nextWith(placeholder)(step);
     while (!(step instanceof End)) {
       step = nextNoRecur(step);
     }
-    const resultUri = await this.store.save(fromPurescriptAst(getResult(step)));
-    return { type: "fork", term: resultUri, uses: intermediateUri };
+    const resultUri = await this.store.save(
+      fromPurescriptAst(getResult(step)),
+      term.dependencies.concat([intermediateUri])
+    );
+    return { type: "fork", parent: resultUri, child: intermediateUri };
   }
   public async run(termKey: Key): Promise<Key> {
     const result = await this.execute(termKey);
@@ -96,18 +98,27 @@ class LocalSingleThreadedCluster<Key extends Serializable>
       case "result":
         return result.term;
       case "fork": {
-        const [termKey, usesKey] = await Promise.all([
-          this.run(result.term),
-          this.run(result.uses)
-        ]);
-        const term = this.store.read(termKey);
-        const continuation = reify(result.uses, usesKey, term);
-        const continuationPointer = await this.store.save(
-          fromPurescriptAst(continuation)
-        );
-        return this.run(continuationPointer);
+        return result.parent;
+        // const parentTask = this.run(result.parent).then(k =>
+        //   this.store.read(k)
+        // );
+        // const childTask = this.run(result.child).then(k => this.store.read(k));
+        // const [parent, child] = await Promise.all([parentTask, childTask]);
+        // const continuation = reify(result.child)(
+        //   toPurescriptAst({ ast: child, path: [] })
+        // )(toPurescriptAst({ ast: parent, path: [] }));
+        // const continuationPointer = await this.store.save(
+        //   fromPurescriptAst(continuation)
+        // );
+        // return this.run(continuationPointer);
       }
     }
+  }
+  private makePlaceholder(key: Key) {
+    return toPurescriptAst({
+      ast: { type: "Provided", value: (key as any) as string },
+      path: []
+    });
   }
 }
 
@@ -121,14 +132,14 @@ function LocalClient<Key extends Serializable>({
   return {
     async run(ast: BasicAst) {
       const source = ast;
-      const sourcePointer = await store.save(source);
+      const sourcePointer = await store.save(source, []);
       const resultPointer = await cluster.run(sourcePointer);
-      const result = await store.read(resultPointer);
-      return result;
+      const { value } = await store.read(resultPointer);
+      return value;
     }
   };
 }
 
 const store = new LocalInMemoryStore();
 const cluster = new LocalSingleThreadedCluster(store);
-const demo = LocalClient({ store, cluster });
+export const distributedExecutionDemo = LocalClient({ store, cluster });
