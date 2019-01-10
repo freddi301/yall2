@@ -2,9 +2,11 @@ import {
   debugEager,
   debugLazy,
   debugSymbolic,
-  debugLazySymbolic
+  debugLazySymbolic,
+  getResult,
+  nextWith
 } from "../language/Yall.External";
-import { Intermediate, End } from "../language/Yall.Pauseable";
+import { WaitRecur, Wait, Recur, End } from "../language/Yall.Pauseable";
 import { PurescriptAst } from "../language/Yall.Ast";
 import { PurescriptSymbol } from "src/language/Yall.Evaluate.Symbol";
 
@@ -17,11 +19,16 @@ function debuggerFactory(debug: (ast: any) => any) {
     let step = debug(ast);
     while (true) {
       if (step instanceof End) {
-        yield step.value0;
+        yield getResult(step);
         return;
-      } else if (step instanceof Intermediate) {
-        const modified = yield step.value0;
-        step = step.value1(modified || step.value0);
+      } else if (
+        step instanceof Wait ||
+        step instanceof Recur ||
+        step instanceof WaitRecur
+      ) {
+        const result = getResult(step);
+        const modified = yield result;
+        step = nextWith(modified || result)(step);
       } else {
         throw new Error("Debugger error");
       }

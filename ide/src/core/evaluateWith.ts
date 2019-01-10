@@ -24,6 +24,6 @@ export const evaluateWith = {
         lastValue = value;
       }
     }
-    throw new Error("Execution limitexceeded");
+    throw new Error("Execution limit exceeded");
   }
 };

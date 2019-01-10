@@ -47,6 +47,18 @@ debugSymbolic = Symbolic.symbolic 0
 debugLazySymbolic :: Ast Identifier (Array String) String → Intermediate (Ast Identifier (Array String) String)
 debugLazySymbolic = LazySymbolic.lazySymbolic 0
 
+next ∷ Intermediate (Ast Identifier (Array String) String) → Intermediate (Ast Identifier (Array String) String)
+next = Pauseable.next
+
+nextNoRecur ∷ Intermediate (Ast Identifier (Array String) String) → Intermediate (Ast Identifier (Array String) String)
+nextNoRecur = Pauseable.nextNoRecur
+
+getResult ∷ Intermediate (Ast Identifier (Array String) String) → (Ast Identifier (Array String) String)
+getResult = Pauseable.getResult
+
+nextWith ∷ ∀ result . result → Intermediate result → Intermediate result
+nextWith = Pauseable.nextWith
+
 getType :: Ast Identifier (Array String) String → Array String → String
 getType ast source = typeRepresentation where
   inferred = Infere.infereWithFreeReferences { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }
