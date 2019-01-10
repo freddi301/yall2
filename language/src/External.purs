@@ -63,6 +63,9 @@ nextWith = Pauseable.nextWith
 reify ∷ Identifier → (Ast Identifier (Array String) String) → (Ast Identifier (Array String) String) → (Ast Identifier (Array String) String)
 reify = Reify.reify
 
+replace :: (Ast Identifier (Array String) String) → (Ast Identifier (Array String) String) → (Ast Identifier (Array String) String) → (Ast Identifier (Array String) String)
+replace = Reify.replace
+
 getType :: Ast Identifier (Array String) String → Array String → String
 getType ast source = typeRepresentation where
   inferred = Infere.infereWithFreeReferences { ast, nextType: 1, typScope: Map.empty, constraints: Map.empty, typSource: Map.empty }

@@ -5,8 +5,8 @@ import {
   next,
   getResult,
   nextWith,
-  nextNoRecur
-  // reify
+  nextNoRecur,
+  replace
 } from "../language/Yall.External";
 import { End } from "../language/Yall.Pauseable";
 import { fromPurescriptAst } from "./fromPurescriptAst";
@@ -15,6 +15,8 @@ import { fromPurescriptAst } from "./fromPurescriptAst";
 interface Store<Key extends Serializable, Value extends Serializable> {
   read(key: Key): Promise<{ value: Value; dependencies: Key[] }>;
   save(value: Value, dependencies: Key[]): Promise<Key>;
+  incrementReferenceCount(key: Key): Promise<void>;
+  decrementReferenceCount(key: Key): Promise<void>;
 }
 
 type Result<Key extends Serializable> =
@@ -42,6 +44,7 @@ class LocalInMemoryStore implements Store<string, BasicAst> {
     string,
     { value: BasicAst; dependencies: string[] }
   >;
+  private referenceCount = {} as Record<string, number>;
   private nextKey = 0;
   public async read(key: string) {
     const entry = this.data[key];
@@ -53,7 +56,18 @@ class LocalInMemoryStore implements Store<string, BasicAst> {
   public async save(value: BasicAst, dependencies: string[]) {
     const key = String(this.nextKey++);
     this.data[key] = { value, dependencies };
+    this.referenceCount[key] = 1;
     return key;
+  }
+  public async incrementReferenceCount(key: string) {
+    this.referenceCount[key]++;
+  }
+  public async decrementReferenceCount(key: string) {
+    this.referenceCount[key]--;
+    if (this.referenceCount[key] <= 0) {
+      delete this.data[key];
+      // delete this.referenceCount[key]
+    }
   }
 }
 
@@ -95,22 +109,24 @@ class LocalSingleThreadedCluster<Key extends Serializable>
   public async run(termKey: Key): Promise<Key> {
     const result = await this.execute(termKey);
     switch (result.type) {
-      case "result":
+      case "result": {
+        this.store.decrementReferenceCount(termKey);
         return result.term;
+      }
       case "fork": {
-        return result.parent;
-        // const parentTask = this.run(result.parent).then(k =>
-        //   this.store.read(k)
-        // );
-        // const childTask = this.run(result.child).then(k => this.store.read(k));
-        // const [parent, child] = await Promise.all([parentTask, childTask]);
-        // const continuation = reify(result.child)(
-        //   toPurescriptAst({ ast: child, path: [] })
-        // )(toPurescriptAst({ ast: parent, path: [] }));
-        // const continuationPointer = await this.store.save(
-        //   fromPurescriptAst(continuation)
-        // );
-        // return this.run(continuationPointer);
+        const parentTask = this.run(result.parent).then(k =>
+          this.store.read(k)
+        );
+        const childTask = this.run(result.child).then(k => this.store.read(k));
+        const [parent, child] = await Promise.all([parentTask, childTask]);
+        const continuation = replace(this.makePlaceholder(result.child))(
+          toPurescriptAst({ ast: child.value, path: [] })
+        )(toPurescriptAst({ ast: parent.value, path: [] }));
+        const continuationPointer = await this.store.save(
+          fromPurescriptAst(continuation),
+          [("dunno" as any) as Key]
+        );
+        return this.run(continuationPointer);
       }
     }
   }
@@ -135,6 +151,8 @@ function LocalClient<Key extends Serializable>({
       const sourcePointer = await store.save(source, []);
       const resultPointer = await cluster.run(sourcePointer);
       const { value } = await store.read(resultPointer);
+      await store.decrementReferenceCount(sourcePointer);
+      await store.decrementReferenceCount(resultPointer);
       return value;
     }
   };
