@@ -31,8 +31,7 @@ type Result<Key extends Serializable> =
 
 // serverless cloud
 interface Cluster<Key extends Serializable> {
-  execute(termPointer: Key): Promise<Result<Key>>;
-  run(termPointer: Key): Promise<Key>;
+  remoteRun(termPointer: Key): Promise<Key>;
 }
 
 interface Client {
@@ -70,10 +69,10 @@ class LocalInMemoryStore implements Store<string, BasicAst> {
   }
 }
 
-class LocalSingleThreadedCluster<Key extends Serializable>
+export class LocalSingleThreadedCluster<Key extends Serializable>
   implements Cluster<Key> {
   constructor(private store: Store<Key, BasicAst>) {}
-  public async execute(termKey: Key): Promise<Result<Key>> {
+  private async execute(termKey: Key): Promise<Result<Key>> {
     const term = await this.store.read(termKey);
     let step = debugLazySymbolic(
       toPurescriptAst({ ast: term.value, path: [] })
@@ -100,7 +99,7 @@ class LocalSingleThreadedCluster<Key extends Serializable>
     const resultUri = await this.store.save(fromPurescriptAst(getResult(step)));
     return { type: "fork", parent: resultUri, child: intermediateUri };
   }
-  public async run(termKey: Key): Promise<Key> {
+  protected async run(termKey: Key): Promise<Key> {
     const result = await this.execute(termKey);
     switch (result.type) {
       case "result": {
@@ -108,11 +107,11 @@ class LocalSingleThreadedCluster<Key extends Serializable>
         return result.term;
       }
       case "fork": {
-        const parentTask = this.run(result.parent).then(async k => ({
+        const parentTask = this.remoteRun(result.parent).then(async k => ({
           parentKey: k,
           parent: await this.store.read(k)
         }));
-        const childTask = this.run(result.child).then(async k => ({
+        const childTask = this.remoteRun(result.child).then(async k => ({
           childKey: k,
           child: await this.store.read(k)
         }));
@@ -128,15 +127,29 @@ class LocalSingleThreadedCluster<Key extends Serializable>
         );
         await this.store.decrementReferenceCount(parentKey);
         await this.store.decrementReferenceCount(childKey);
-        return this.run(continuationPointer);
+        return this.remoteRun(continuationPointer);
       }
     }
+  }
+  public remoteRun(termPointer: Key) {
+    return this.run(termPointer);
   }
   private makePlaceholder(key: Key) {
     return toPurescriptAst({
       ast: { type: "Provided", value: (key as any) as string },
       path: []
     });
+  }
+}
+
+export class RestClusterClient implements Cluster<string> {
+  constructor(private url: string) {}
+  public async remoteRun(termPointer: string) {
+    const response = await fetch(
+      this.url + "?termKey=" + encodeURIComponent(termPointer)
+    );
+    const result = await response.text();
+    return result;
   }
 }
 
@@ -151,7 +164,7 @@ function LocalClient<Key extends Serializable>({
     async run(ast: BasicAst) {
       const source = ast;
       const sourcePointer = await store.save(source);
-      const resultPointer = await cluster.run(sourcePointer);
+      const resultPointer = await cluster.remoteRun(sourcePointer);
       const { value } = await store.read(resultPointer);
       await store.decrementReferenceCount(sourcePointer);
       await store.decrementReferenceCount(resultPointer);
@@ -207,6 +220,18 @@ class FirebaseStore implements Store<string, BasicAst> {
 
 export const localStore = new LocalInMemoryStore();
 export const firebaseStore = new FirebaseStore();
-const store = firebaseStore;
-const cluster = new LocalSingleThreadedCluster(store);
-export const distributedExecutionDemo = LocalClient({ store, cluster });
+export const restClusterClient = new RestClusterClient(
+  // "https://distributed-lambda-calculus.now.sh/run.js"
+  "http://localhost:8080"
+);
+export const localClusterWithFirebaseStore = new LocalSingleThreadedCluster(
+  firebaseStore
+);
+export const localClusterWithInMemoryStore = new LocalSingleThreadedCluster(
+  localStore
+);
+
+export const distributedExecutionDemo = LocalClient({
+  store: firebaseStore,
+  cluster: restClusterClient
+});

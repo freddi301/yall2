@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "builds": [{ "src": "run.js", "use": "@now/node" }],
+  "name": "distributed-lambda-calculus",
+  "alias": "distributed-lambda-calculus.now.sh"
+}

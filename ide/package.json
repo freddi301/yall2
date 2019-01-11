@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/lodash": "^4.14.116",
+    "firebase": "^5.7.3",
     "fuse.js": "^3.2.1",
     "immer": "^1.7.2",
+    "node-fetch": "^2.3.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
@@ -19,6 +20,8 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.116",
+    "@types/node-fetch": "^2.1.4",
     "@types/jest": "^23.3.2",
     "@types/node": "^10.10.1",
     "@types/react": "^16.4.14",
@@ -26,6 +29,7 @@
     "@types/react-redux": "^6.0.9",
     "@types/redux": "^3.6.0",
     "typescript": "^3.0.3",
-    "worker-loader": "^2.0.0"
+    "worker-loader": "^2.0.0",
+    "ts-node": "^7.0.1"
   }
 }

@@ -22,3 +22,5 @@ if (module.hot) {
 }
 
 declare const module: NodeModule & { hot: any };
+
+// module.exports = require("./cloud/zeit-now/index"); //tslint:disable-line
