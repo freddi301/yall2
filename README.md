@@ -13,3 +13,5 @@ git clone https://github.com/freddi301/yall2.git
 cd yall2
 yarn start
 ```
+
+![scrteenshot](screenshot.png)
